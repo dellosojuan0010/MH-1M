@@ -1,7 +1,43 @@
-# Ignorar os dados a seguir
+# Ambientes virtuais
+env/
+venv/
+ENV/
+.venv/
+.conda/
+*.conda
+*.env
 
+# Cache do Python
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.pyo
+
+# Dados (ajustado para sua pasta 'dados/')
 dados/
-modelos/
-*.log
-*.csv
+*.npy
 *.npz
+*.csv
+*.h5
+*.hdf5
+*.parquet
+*.pkl
+*.joblib
+
+# Notebooks e checkpoints
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs e saídas
+*.log
+*.out
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
