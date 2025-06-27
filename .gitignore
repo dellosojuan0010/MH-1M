@@ -1,6 +1,6 @@
 # Ignorar os dados a seguir
 
-dados/*
+dados/
 modelos/
 *.log
 *.csv
