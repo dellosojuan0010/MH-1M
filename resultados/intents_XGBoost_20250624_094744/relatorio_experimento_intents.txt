@@ -1,0 +1,19 @@
+=== RELATÓRIO DO EXPERIMENTO ===
+Data e hora: 2025-06-24 09:47:44.935407
+Namespaces utilizados: ['intents']
+
+>> Modelo completo:
+- Nº de instâncias: 1340515
+- Nº de features: 407
+- Tempo de treino: 17.97 s
+- Hiperparâmetros: {'n_estimators': 300, 'max_depth': 10, 'learning_rate': 0.1, 'subsample': 0.8, 'eval_metric': 'logloss', 'verbosity': 1, 'n_jobs': -1}
+- Relatório de classificação:
+              precision    recall  f1-score   support
+
+           0       0.94      0.99      0.96    244284
+           1       0.83      0.31      0.46     23819
+
+    accuracy                           0.93    268103
+   macro avg       0.88      0.65      0.71    268103
+weighted avg       0.93      0.93      0.92    268103
+

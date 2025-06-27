@@ -16,7 +16,7 @@ diretorio_raiz = os.path.abspath(os.path.join(diretorio_atual, '..'))
 sys.path.append(diretorio_raiz)
 
 try:
-    from dataset_selector import DatasetSelector
+    from dados.dataset_selector import DatasetSelector
 except Exception as e:
     print("❌ Erro ao importar DatasetSelector:", e)
     sys.exit(1)
@@ -36,8 +36,9 @@ print("========================\n")
 
 # ========== Carrega os dados ==========
 try:
-    ds = DatasetSelector()
-    X, feature_names, y = ds.get_data_by_namespaces(args.namespaces)
+    ds = DatasetSelector()    
+    print("Carregando dados...")
+    X, feature_names, y = ds.select_random_classes(args.namespaces, total_samples=100000, random_state=42)
     y = y.astype(int)
     print(f"Dados carregados: {X.shape[0]} instâncias, {X.shape[1]} features")
 except Exception as e:
@@ -48,11 +49,9 @@ except Exception as e:
 print("Normalizando dados...")
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
+del X  # Liberar memória
 
-# ========== Redução com PCA ==========
-print("Reduzindo dimensionalidade com PCA para visualização...")
-pca = PCA(n_components=2)
-X_pca = pca.fit_transform(X_scaled)
+
 
 # ========== Clusterização DBSCAN ==========
 print("Executando DBSCAN...")
@@ -72,7 +71,13 @@ print(f"\nClusters detectados: {n_clusters}")
 print(f"Instâncias como ruído: {n_noise}")
 print(f"Adjusted Rand Index (ARI): {ari_score:.4f}")
 
+
 # ========== Visualização ==========
+# ========== Redução com PCA ==========
+print("Reduzindo dimensionalidade com PCA para visualização...")
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+del X_scaled  # Liberar memória
 print("Gerando gráfico...")
 plt.figure(figsize=(10, 5))
 

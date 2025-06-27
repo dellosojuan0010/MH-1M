@@ -1,0 +1,12 @@
+=== RELATÓRIO DO MINILOTE ===
+Data e hora: 2025-06-18 11:13:25.510873
+Namespaces utilizados: ['intents', 'permissions', 'opcodes']
+
+>> Minilote 40:
+- Nº de instâncias: 25000
+- Nº de features: 853
+- Tempo de treino: 36.28 s
+- Accuracy: 0.9731
+- Precision: 0.9737
+- Recall: 0.7163
+- F1-Score: 0.8254
