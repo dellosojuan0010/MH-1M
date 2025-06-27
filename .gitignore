@@ -1,0 +1,7 @@
+# Ignorar os dados a seguir
+
+dados/
+modelos/
+*.log
+*.csv
+*.npz
