@@ -24,7 +24,7 @@ args = parser.parse_args()
 
 # === Carrega dados ===
 ds = DatasetSelector()
-X, y = ds.select_by_namespaces(args.namespaces)
+X, y = ds.get_data_by_namespaces(args.namespaces)
 
 print("✅ Dados carregados:", X.shape, "classes:", np.unique(y))
 
