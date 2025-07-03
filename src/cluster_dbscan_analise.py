@@ -18,7 +18,7 @@ sys.path.append(diretorio_raiz)
 try:
     from dados.dataset_selector import DatasetSelector
 except Exception as e:
-    print("❌ Erro ao importar DatasetSelector:", e)
+    print("Erro ao importar DatasetSelector:", e)
     sys.exit(1)
 
 # ========== Argumentos ==========
