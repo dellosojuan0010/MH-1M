@@ -16,7 +16,7 @@ diretorio_raiz = os.path.abspath(os.path.join(diretorio_atual, '..'))
 sys.path.append(diretorio_raiz)
 
 try:
-    from dados.dataset_selector import DatasetSelector
+    from dataset_selector import DatasetSelector
 except Exception as e:
     print("Erro ao importar DatasetSelector:", e)
     sys.exit(1)
