@@ -11,7 +11,7 @@ print(f"Arquivos: {dados.files}")
 # Acessa diretamente os dados
 X = dados['data']
 colunas = dados['column_names']
-
+clas
 # Filtra colunas com namespace 'apicalls::'
 colunas_apicalls = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
 
