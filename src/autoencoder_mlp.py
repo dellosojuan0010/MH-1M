@@ -52,14 +52,19 @@ class AutoencoderEmbedding:
         print("✅ Embeddings salvos com sucesso.")
 
 # =================== USO ===================
+from dataset_selector import DatasetSelector
 
-if __name__ == "__main__":
-    # Exemplo: use seus dados reais aqui
+if __name__ == "__main__":    
     n_amostras = 1000
     n_features = 22394
     X = np.random.rand(n_amostras, n_features)
 
-    autoenc = AutoencoderEmbedding(input_dim=n_features, bottleneck_dim=6000, max_iter=100)
+    # === Carregar dados ===
+    ds = DatasetSelector()
+    X, feature_names, y = ds.get_data_by_namespaces(['apicalls'])
+    y = y.astype(int)
+
+    autoenc = AutoencoderEmbedding(input_dim=len(feature_names), bottleneck_dim=6000, max_iter=100)
     autoenc.fit(X)
 
     embeddings = autoenc.transform()
