@@ -23,8 +23,8 @@ for i in colunas_apicalls:
         colunas_zeros.append(colunas[i])
 
 # Exibir resultados
-print(f"🔍 Total de colunas no namespace 'apicalls': {len(colunas_apicalls)}")
-print(f"🧼 Colunas 'apicalls' com apenas zeros: {len(colunas_zeros)}")
-print("\n📋 Nomes das colunas:")
+print(f"Total de colunas no namespace 'apicalls': {len(colunas_apicalls)}")
+print(f"Colunas 'apicalls' com apenas zeros: {len(colunas_zeros)}")
+print("\nNomes das colunas:")
 for nome in colunas_zeros:
     print(nome)
