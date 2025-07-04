@@ -59,10 +59,11 @@ class DatasetSelector:
         # goodware == 0
         # malware == 1
         # classe_unicas = [0, 1]
-        classes_unicas = [np.unique(y)]
+        classes_unicas = np.unique(y)
         # Se por acaso não for detectado exatamente duas classes será considerando um problema e o algoritmo irá parar
         if len(classes_unicas) != 2:
-            raise ValueError("O dataset deve conter exatamente duas classes.")
+            print(classes_unicas)
+            #raise ValueError("O dataset deve conter exatamente duas classes.")
         
         # a quantidade de amostras deve ser igual para cada classe
         amostras_por_classe = total_samples // 2

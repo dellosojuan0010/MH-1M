@@ -80,15 +80,15 @@ if __name__ == "__main__":
     from dataset_selector import DatasetSelector
     ds = DatasetSelector()
     #X, feature_names, y = ds.get_data_by_namespaces(['apicalls'])
-    X, feature_names, y = ds.select_random_classes(['apicalls'],total_samples=100)
+    X, feature_names, y = ds.select_random_classes(['apicalls'],total_samples=119094)
 
     model = treinar_autoencoder(
         X, input_dim=X.shape[1], bottleneck_dim=6000,
-        hidden_ratio=0.3, batch_size=256, num_epochs=100, device=device
+        hidden_ratio=0.3, batch_size=256, num_epochs=100
     )
 
     print("🎯 Extraindo embeddings...")
-    embeddings = extrair_embeddings(model, X, device=device)
+    embeddings = extrair_embeddings(model, X)
 
     np.save("embeddings.npy", embeddings)
     print(f"✅ Embeddings salvos! Shape: {embeddings.shape}")
