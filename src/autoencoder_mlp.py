@@ -61,9 +61,17 @@ if __name__ == "__main__":
 
     # === Carregar dados ===
     ds = DatasetSelector()
-    X, feature_names, y = ds.get_data_by_namespaces(['apicalls'])
+    #X, feature_names, y = ds.get_data_by_namespaces(['apicalls'])
+    X, feature_names, y = ds.select_random_classes(['apicalls'],total_samples=1000)
+    print("Dados carregados: ")
+    print(X.shape)
     y = y.astype(int)
-
+    X = X.astype(np.float32)    
+    
+    X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
+    X = X.astype(np.float32)
+    
+    print("Dados prontos para o autoencoder")
     autoenc = AutoencoderEmbedding(input_dim=len(feature_names), bottleneck_dim=6000, max_iter=100)
     autoenc.fit(X)
 
