@@ -82,6 +82,8 @@ if __name__ == "__main__":
     #X, feature_names, y = ds.get_data_by_namespaces(['apicalls'])
     X, feature_names, y = ds.select_random_classes(['apicalls'],total_samples=119094)
 
+    print(f"Quantidade de cada classe: {np.unique(y)}")
+
     model = treinar_autoencoder(
         X, input_dim=X.shape[1], bottleneck_dim=6000,
         hidden_ratio=0.3, batch_size=256, num_epochs=100

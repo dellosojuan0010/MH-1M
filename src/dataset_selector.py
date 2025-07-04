@@ -67,19 +67,26 @@ class DatasetSelector:
         
         # a quantidade de amostras deve ser igual para cada classe
         amostras_por_classe = total_samples // 2
+        # retorna os índices de todas as instâncias que são da classe 0 (onde estão as instâncias da classe 0)        
         idx_class_0 = np.where(y == classes_unicas[0])[0]
+        # retorna os índices de todas as instâncias que são da classe 1 (onde estão as instâncias da classe 1)
         idx_class_1 = np.where(y == classes_unicas[1])[0]
-
         if len(idx_class_0) < amostras_por_classe or len(idx_class_1) < amostras_por_classe:
+            print("A base de dados não possui quantidade de amostras de cada classe solicitada!")
             raise ValueError("Não há instâncias suficientes em uma das classes para o total solicitado.")
+        else:
+            print("A base de dados possui quantidade de amostras de cada classe solicitada!")
 
-        idx_0 = rng.choice(idx_class_0, amostras_por_classe, replace=False)
-        idx_1 = rng.choice(idx_class_1, amostras_por_classe, replace=False)
+        # escolha aleatória sem repetição de uma quantidade de amostras
+        indices_selecionados_0 = rng.choice(idx_class_0, amostras_por_classe, replace=False)
+        indices_selecionados_1 = rng.choice(idx_class_1, amostras_por_classe, replace=False)
 
-        indices_finais = np.concatenate([idx_0, idx_1])
-        rng.shuffle(indices_finais)
-
-        return X[indices_finais], cols, y[indices_finais]
+        # unifica todos os indices das instâncias que serão utilizadas
+        indices_selecionados_finais = np.concatenate([indices_selecionados_0, indices_selecionados_1])
+        # embaralha todas as instâncias para que não se tenha uma ordem específica no algoritmo
+        rng.shuffle(indices_selecionados_finais)
+        # retorna a instâncias, nomes das features e de cada instância retorna o atributo alvo (classe)
+        return X[indices_selecionados_finais], cols, y[indices_selecionados_finais]
 
     def select_random_classes_custom(self, namespaces, samples_per_class: dict, random_state=42):
         """
@@ -92,17 +99,30 @@ class DatasetSelector:
 
         Retorna: X_selected, colunas, y_selected
         """
+        # Objeto com funções para gerar escolhas aleatórias e embaralhamento com base em uma semente
         rng = np.random.default_rng(seed=random_state)
+        # Captura todas amostras de namespaces especificados e retornado por get_data_by_namespaces
         X, cols, y = self.get_data_by_namespaces(namespaces)
-
+        
+        # cria lista de indices de instâncias selecionadas vazia
         indices_selecionados = []
-
+        
+        # para cada classe solicitada existente no dicionário pega a quantidade
         for classe, qtd in samples_per_class.items():
+            # verifica os indices onde estão as instâncias dessa classe
             idx_classe = np.where(y == classe)[0]
+            # verifica se tem amostras suficientes para atender a solicitação
             if len(idx_classe) < qtd:
+                print(f"Existem classes com quantidade insuficiente para o solicitado!")
                 raise ValueError(f"Classe {classe} possui apenas {len(idx_classe)} instâncias disponíveis, mas {qtd} foram solicitadas.")
-            idx_amostrados = rng.choice(idx_classe, qtd, replace=False)
-            indices_selecionados.extend(idx_amostrados)
+            else:
+                print(f"Quantidade de amostras existentes de cada classe satisfaz a solicitação")
+            # faz a escolha aleatoria sem repetição das instâncias para essa classe
+            indices_selecionados_classeX = rng.choice(idx_classe, qtd, replace=False)
+            # adiciona a lista de indices de instâncias selecionadas as selecionadas para essa classe
+            indices_selecionados.extend(indices_selecionados_classeX)
 
+        # embaralha os indices para que não sejam agrupados
         rng.shuffle(indices_selecionados)
+        # retorna os dados do indices selecionados, os nomes de todas as features e a classe alvo.
         return X[indices_selecionados], cols, y[indices_selecionados]
