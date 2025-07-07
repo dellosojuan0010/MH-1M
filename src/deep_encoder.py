@@ -116,6 +116,8 @@ if __name__ == "__main__":
     ds = DatasetSelector()
 
     X, feature_names, y = ds.select_random_classes(['apicalls'], total_samples=119094)
+    
+    
     print(f"✅ Dados carregados: X={X.shape}, y={y.shape}")
     print(f"🔍 Classes únicas: {np.unique(y)}")
 
