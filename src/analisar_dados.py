@@ -17,9 +17,15 @@ dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
 print("Chaves encontradas no arquivo:")
 print(dados.files)
 
-X = dados['data']
+# Acessa diretamente os dados
+X = dados['data'][0:10000, :]  # Exemplo: pega as primeiras 1000 amostras
+
 print(f"Shape da matriz 'data': {X.shape}")
 print(f"Tipo de dado da matriz 'data': {X.dtype}")
+for i_amostra in range(len(X)):
+    for j_feature in range(len(X[i_amostra])):
+        if X[i_amostra][j_feature] != 0 and X[i_amostra][j_feature] != 1:
+            print(f"Amostra {i_amostra}, Feature {j_feature}: {X[i_amostra][j_feature]}")
 
 # # Análise da chave 'data'
 # if 'data' in dados:
@@ -38,7 +44,14 @@ print(f"Tipo de dado da matriz 'data': {X.dtype}")
 # else:
 #     print("A chave 'data' não foi encontrada no arquivo.")
 
-# # Análise da chave 'classes'
+y = dados['classes']
+for i in range(len(y)):
+    if y[i] != 0 and y[i] != 1:
+        print(f"Amostra {i}: {y[i]}")
+unicos = np.unique(y)
+print("\nClasses únicas encontradas:")
+print(unicos)
+# Análise da chave 'classes'
 # if 'classes' in dados:
 #     y = dados['classes']
 #     unicos, contagens = np.unique(y, return_counts=True)

@@ -13,22 +13,22 @@ class DeepAutoencoder(nn.Module):
 
         self.encoder = nn.Sequential(
             nn.Linear(input_dim, 8192),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Linear(8192, 4096),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Linear(4096, 2048),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Linear(2048, bottleneck_dim),
-            nn.ReLU()
+            nn.LeakyReLU()
         )
 
         self.decoder = nn.Sequential(
             nn.Linear(bottleneck_dim, 2048),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Linear(2048, 4096),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Linear(4096, 8192),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Linear(8192, input_dim),
             nn.Sigmoid()
         )
@@ -119,7 +119,13 @@ if __name__ == "__main__":
     print(f"✅ Dados carregados: X={X.shape}, y={y.shape}")
     print(f"🔍 Classes únicas: {np.unique(y)}")
 
+    # Dispositivo
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    if device == "cuda":
+        print("🚀 GPU disponível! Usando CUDA.")        
+    else:
+        print("⚠️ GPU não disponível. Usando CPU.")
+        raise RuntimeError("GPU não disponível. Treinamento não pode prosseguir.")
     print(f"🖥️ Usando dispositivo: {device.upper()}")
 
     model = treinar_autoencoder(

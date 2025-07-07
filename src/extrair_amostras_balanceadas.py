@@ -11,7 +11,7 @@ dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True)
 X = dados['data']
 y = dados['classes']
 colunas = dados['column_names']
-
+del dados
 print("✅ Arquivo carregado com sucesso.")
 print(f"📐 Shape dos dados: X = {X.shape}, y = {y.shape}")
 print(f"📊 Número total de instâncias: {len(y)}")
@@ -39,16 +39,16 @@ idx_nao_malware_sample = rng.choice(idx_nao_malware, size=qtd, replace=False)
 idx_malware_sample = idx_malware[:qtd]
 
 # Combina e embaralha
-idx_total = np.concatenate([idx_malware_sample, idx_malware_sample])
+idx_total = np.concatenate([idx_nao_malware_sample, idx_malware_sample])
 rng.shuffle(idx_total)
 
 # Dados finais
-X_bal = X[idx_total]
-y_bal = y[idx_total]
+X = X[idx_total]
+y = y[idx_total]
 feature_names = np.array(colunas)
 
-print(f"📐 Novo shape dos dados balanceados: X = {X_bal.shape}, y = {y_bal.shape}")
+print(f"📐 Novo shape dos dados balanceados: X = {X.shape}, y = {y.shape}")
 print("💾 Salvando arrays .npz...")
 
-np.savez("amostras_balanceadas.npz", data=X_bal, classes=y_bal, column_names=feature_names)
+np.savez("amostras_balanceadas.npz", data=X, classes=y, column_names=feature_names)
 print("✅ Arquivo salvo: amostras_balanceadas.npz")

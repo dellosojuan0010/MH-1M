@@ -13,22 +13,22 @@ class DeepAutoencoder(nn.Module):
 
         self.encoder = nn.Sequential(
             nn.Linear(input_dim, 8192),
-            nn.ReLU(),
+            nn.LeakyReLU(0.01),
             nn.Linear(8192, 4096),
-            nn.ReLU(),
+            nn.LeakyReLU(0.01),
             nn.Linear(4096, 2048),
-            nn.ReLU(),
+            nn.LeakyReLU(0.01),
             nn.Linear(2048, bottleneck_dim),
-            nn.ReLU()
+            nn.LeakyReLU(0.01)
         )
 
         self.decoder = nn.Sequential(
             nn.Linear(bottleneck_dim, 2048),
-            nn.ReLU(),
+            nn.LeakyReLU(0.01),
             nn.Linear(2048, 4096),
-            nn.ReLU(),
+            nn.LeakyReLU(0.01),
             nn.Linear(4096, 8192),
-            nn.ReLU(),
+            nn.LeakyReLU(0.01),
             nn.Linear(8192, input_dim),
             nn.Sigmoid()
         )
@@ -80,15 +80,18 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=700, batch_size=128, num_ep
         np.savetxt("loss_por_epoca.csv", loss_por_epoca, delimiter=",")
         print("✅ Loss por época salva: 'loss_por_epoca.csv'")
 
-        plt.figure()
-        plt.plot(range(1, num_epochs + 1), loss_por_epoca, marker='o')
-        plt.xlabel("Época")
-        plt.ylabel("Loss (MSE)")
-        plt.title("Curva de Perda do Autoencoder")
-        plt.grid(True)
-        plt.savefig("curva_loss.png")
-        plt.close()
-        print("📈 Gráfico da loss salvo: 'curva_loss.png'")
+        try:
+            plt.figure()
+            plt.plot(range(1, num_epochs + 1), loss_por_epoca, marker='o')
+            plt.xlabel("Época")
+            plt.ylabel("Loss (MSE)")
+            plt.title("Curva de perda do Autoencoder")
+            plt.grid(True)
+            plt.savefig("curva_loss.png")
+            plt.close()
+            print("📊 Gráfico da loss salvo em 'curva_loss.png'")
+        except Exception as e:
+            print("⚠️ Não foi possível salvar gráfico da loss:", e)
 
     except Exception as e:
         print(f"❌ Erro durante treinamento: {e}")
@@ -110,27 +113,41 @@ def extrair_embeddings(model, X, device='cpu', batch_size=512):
 
 # ========== USO ==========
 if __name__ == "__main__":
-    from dataset_selector import DatasetSelector
-    ds = DatasetSelector()
+    #from dataset_selector import DatasetSelector
+    #ds = DatasetSelector()
 
     # Escolha de features
-    X, feature_names, y = ds.select_random_classes(['apicalls'], total_samples=119094)
+    #X, feature_names, y = ds.select_random_classes(['apicalls'], total_samples=119094)
+    
+    # Carregar dados
+    print("🔄 Carregando dados...")
+    caminho_arquivo = os.path.join("..", "dados", "amostras_balanceadas.npz")
+    dados = np.load(caminho_arquivo, allow_pickle=True)
+    X = dados['data']
+    y = dados['classes']
+    colunas = dados['column_names']
+    
     print(f"✅ Dados carregados: X={X.shape}, y={y.shape}")
     print(f"🔍 Classes únicas: {np.unique(y)}")
 
     # Dispositivo
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"🖥️ Usando dispositivo: {device.upper()}")
+    # device = "cuda" if torch.cuda.is_available() else "cpu"
+    # if device == "cuda":
+    #     print("🚀 GPU disponível! Usando CUDA.")        
+    # else:
+    #     print("⚠️ GPU não disponível. Usando CPU.")
+    #     raise RuntimeError("GPU não disponível. Treinamento não pode prosseguir.")
+    # print(f"🖥️ Usando dispositivo: {device.upper()}")
 
-    # Treinamento
-    model = treinar_autoencoder(
-        X, input_dim=X.shape[1], bottleneck_dim=700,
-        batch_size=64, num_epochs=20, device=device
-    )
+    # # Treinamento
+    # model = treinar_autoencoder(
+    #     X, input_dim=X.shape[1], bottleneck_dim=700,
+    #     batch_size=64, num_epochs=20, device=device
+    # )
 
-    # Embeddings
-    print("🎯 Extraindo embeddings...")
-    embeddings = extrair_embeddings(model, X, device=device)
+    # # Embeddings
+    # print("🎯 Extraindo embeddings...")
+    # embeddings = extrair_embeddings(model, X, device=device)
 
-    np.save("deep_embeddings.npy", embeddings)
-    print(f"✅ Embeddings salvos: 'deep_embeddings.npy' (shape: {embeddings.shape})")
+    # np.save("deep_embeddings.npy", embeddings)
+    # print(f"✅ Embeddings salvos: 'deep_embeddings.npy' (shape: {embeddings.shape})")

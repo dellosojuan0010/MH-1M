@@ -9,9 +9,10 @@ dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True)
 print(f"Arquivos: {dados.files}")
 
 # Acessa diretamente os dados
-X = dados['data']
+X = dados['data'][0:1000, :]  # Exemplo: pega as primeiras 1000 amostras
+
 colunas = dados['column_names']
-clas
+classe = dados['classes']
 # Filtra colunas com namespace 'apicalls::'
 colunas_apicalls = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
 
