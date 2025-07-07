@@ -1,0 +1,15 @@
+🔄 Carregando arquivo .npz...
+✅ Arquivo carregado com sucesso.
+📐 Shape dos dados: X = (1340515, 23247), y = (1340515,)
+📊 Número total de instâncias: 1340515
+🔍 Valores únicos em y (classes): [0 1]
+   - Não Malware (0): 1221421 instâncias
+   - Malware (1): 119094 instâncias
+
+🔢 Malware encontrados: 119094
+🔢 Não-malware encontrados: 1221421
+
+⚖️ Selecionando 119094 instâncias de cada classe para balanceamento...
+📐 Novo shape dos dados balanceados: X = (238188, 23247), y = (238188,)
+💾 Salvando arrays .npz...
+✅ Arquivo salvo: amostras_balanceadas.npz
