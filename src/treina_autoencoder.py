@@ -130,24 +130,24 @@ if __name__ == "__main__":
     print(f"✅ Dados carregados: X={X.shape}, y={y.shape}")
     print(f"🔍 Classes únicas: {np.unique(y)}")
 
-    # Dispositivo
-    # device = "cuda" if torch.cuda.is_available() else "cpu"
-    # if device == "cuda":
-    #     print("🚀 GPU disponível! Usando CUDA.")        
-    # else:
-    #     print("⚠️ GPU não disponível. Usando CPU.")
-    #     raise RuntimeError("GPU não disponível. Treinamento não pode prosseguir.")
-    # print(f"🖥️ Usando dispositivo: {device.upper()}")
+    #Dispositivo
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    if device == "cuda":
+        print("🚀 GPU disponível! Usando CUDA.")        
+    else:
+        print("⚠️ GPU não disponível. Usando CPU.")
+        raise RuntimeError("GPU não disponível. Treinamento não pode prosseguir.")
+    print(f"🖥️ Usando dispositivo: {device.upper()}")
 
-    # # Treinamento
-    # model = treinar_autoencoder(
-    #     X, input_dim=X.shape[1], bottleneck_dim=700,
-    #     batch_size=64, num_epochs=20, device=device
-    # )
+    # Treinamento
+    model = treinar_autoencoder(
+        X, input_dim=X.shape[1], bottleneck_dim=700,
+        batch_size=64, num_epochs=20, device=device
+    )
 
-    # # Embeddings
-    # print("🎯 Extraindo embeddings...")
-    # embeddings = extrair_embeddings(model, X, device=device)
+    # Embeddings
+    print("🎯 Extraindo embeddings...")
+    embeddings = extrair_embeddings(model, X, device=device)
 
-    # np.save("deep_embeddings.npy", embeddings)
-    # print(f"✅ Embeddings salvos: 'deep_embeddings.npy' (shape: {embeddings.shape})")
+    np.save("deep_embeddings.npy", embeddings)
+    print(f"✅ Embeddings salvos: 'deep_embeddings.npy' (shape: {embeddings.shape})")
