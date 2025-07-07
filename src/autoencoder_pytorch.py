@@ -86,11 +86,11 @@ if __name__ == "__main__":
 
     model = treinar_autoencoder(
         X, input_dim=X.shape[1], bottleneck_dim=6000,
-        hidden_ratio=0.3, batch_size=256, num_epochs=100
+        hidden_ratio=0.3, batch_size=256, num_epochs=1
     )
 
     print("🎯 Extraindo embeddings...")
     embeddings = extrair_embeddings(model, X)
 
     np.save("embeddings.npy", embeddings)
-    print(f"✅ Embeddings salvos! Shape: {embeddings.shape}")
+    print(f"Embeddings salvos! Shape: {embeddings.shape}")
