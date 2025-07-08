@@ -77,20 +77,41 @@ def extrair_embeddings(model, X, device='cpu', batch_size=512):
 if __name__ == "__main__":
 
     # === Carregar dados ===
-    from dataset_selector import DatasetSelector
-    ds = DatasetSelector()
+    #from dataset_selector import DatasetSelector
+    #ds = DatasetSelector()
     #X, feature_names, y = ds.get_data_by_namespaces(['apicalls'])
-    X, feature_names, y = ds.select_random_classes(['apicalls'],total_samples=119094)
+    #X, feature_names, y = ds.select_random_classes(['apicalls'],total_samples=119094)
+
+    # Carregar dados
+    print("🔄 Carregando dados...")
+    caminho_arquivo = os.path.join("..", "dados", "amostras_balanceadas.npz")
+    dados = np.load(caminho_arquivo, allow_pickle=True)
+    X = dados['data']
+    y = dados['classes']
+    colunas = dados['column_names']
+    
+    
+    print(f"✅ Dados carregados: X={X.shape}, y={y.shape}")
+    print(f"🔍 Classes únicas: {np.unique(y)}")
+
+    # Dispositivo
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    if device == "cuda":
+        print("🚀 GPU disponível! Usando CUDA.")        
+    else:
+        print("⚠️ GPU não disponível. Usando CPU.")
+        raise RuntimeError("GPU não disponível. Treinamento não pode prosseguir.")
+    print(f"🖥️ Usando dispositivo: {device.upper()}")
 
     print(f"Quantidade de cada classe: {np.unique(y)}")
 
-    model = treinar_autoencoder(
-        X, input_dim=X.shape[1], bottleneck_dim=6000,
-        hidden_ratio=0.3, batch_size=256, num_epochs=1
-    )
+    # model = treinar_autoencoder(
+    #     X, input_dim=X.shape[1], bottleneck_dim=6000,
+    #     hidden_ratio=0.3, batch_size=256, num_epochs=1
+    # )
 
-    print("🎯 Extraindo embeddings...")
-    embeddings = extrair_embeddings(model, X)
+    # print("🎯 Extraindo embeddings...")
+    # embeddings = extrair_embeddings(model, X)
 
-    np.save("embeddings.npy", embeddings)
-    print(f"Embeddings salvos! Shape: {embeddings.shape}")
+    # np.save("embeddings.npy", embeddings)
+    # print(f"Embeddings salvos! Shape: {embeddings.shape}")

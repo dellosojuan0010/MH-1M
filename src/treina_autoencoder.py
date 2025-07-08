@@ -6,30 +6,31 @@ import numpy as np
 import datetime
 import os
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 class DeepAutoencoder(nn.Module):
-    def __init__(self, input_dim, bottleneck_dim=700):
+    def __init__(self, input_dim, bottleneck_dim=1500):
         super(DeepAutoencoder, self).__init__()
 
         self.encoder = nn.Sequential(
-            nn.Linear(input_dim, 8192),
+            nn.Linear(input_dim, 11197),
             nn.LeakyReLU(0.01),
-            nn.Linear(8192, 4096),
+            nn.Linear(11197, 6000),
             nn.LeakyReLU(0.01),
-            nn.Linear(4096, 2048),
+            nn.Linear(6000, 3000),
             nn.LeakyReLU(0.01),
-            nn.Linear(2048, bottleneck_dim),
+            nn.Linear(3000, bottleneck_dim),
             nn.LeakyReLU(0.01)
         )
 
         self.decoder = nn.Sequential(
-            nn.Linear(bottleneck_dim, 2048),
+            nn.Linear(bottleneck_dim, 3000),
             nn.LeakyReLU(0.01),
-            nn.Linear(2048, 4096),
+            nn.Linear(3000, 6000),
             nn.LeakyReLU(0.01),
-            nn.Linear(4096, 8192),
+            nn.Linear(6000, 11197),
             nn.LeakyReLU(0.01),
-            nn.Linear(8192, input_dim),
+            nn.Linear(11197, input_dim),
             nn.Sigmoid()
         )
 
@@ -38,7 +39,7 @@ class DeepAutoencoder(nn.Module):
         x_recon = self.decoder(z)
         return x_recon, z
 
-def treinar_autoencoder(X, input_dim, bottleneck_dim=700, batch_size=128, num_epochs=10, device='cpu'):
+def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_epochs=10, device='cpu'):
     model = DeepAutoencoder(input_dim, bottleneck_dim).to(device)
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
@@ -58,7 +59,7 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=700, batch_size=128, num_ep
         for epoch in range(num_epochs):
             model.train()
             total_loss = 0.0
-            for i, batch in enumerate(loader):
+            for i, batch in enumerate(tqdm(loader, desc=f"Época {epoch+1}/{num_epochs}", leave=True, unit="batch")):
                 inputs = batch[0].to(device)
                 optimizer.zero_grad()
                 outputs, _ = model(inputs)
@@ -121,7 +122,7 @@ if __name__ == "__main__":
     
     # Carregar dados
     print("🔄 Carregando dados...")
-    caminho_arquivo = os.path.join("..", "dados", "amostras_balanceadas.npz")
+    caminho_arquivo = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz")
     dados = np.load(caminho_arquivo, allow_pickle=True)
     X = dados['data']
     y = dados['classes']
@@ -141,8 +142,8 @@ if __name__ == "__main__":
 
     # Treinamento
     model = treinar_autoencoder(
-        X, input_dim=X.shape[1], bottleneck_dim=700,
-        batch_size=64, num_epochs=20, device=device
+        X, input_dim=X.shape[1], bottleneck_dim=1500,
+        batch_size=256, num_epochs=10, device=device
     )
 
     # Embeddings
