@@ -1,4 +1,4 @@
-import torch
+import torch 
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
@@ -8,6 +8,8 @@ import os
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import copy
+from torch.cuda.amp import autocast
+import torch.amp
 
 class DeepAutoencoder(nn.Module):
     def __init__(self, input_dim, bottleneck_dim=1500):
@@ -40,13 +42,15 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
     model = DeepAutoencoder(input_dim, bottleneck_dim).to(device)
     criterion = nn.BCELoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
+    scaler = torch.amp.GradScaler(device)  # Para mixed precision
 
     X = X.astype(np.float32)
     X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
     X = (X - X.min()) / (X.max() - X.min() + 1e-8)
 
-    dataset = TensorDataset(torch.tensor(X))
-    loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=12, pin_memory=True)
+    tensor_X = torch.from_numpy(X.astype(np.float16) if device == 'cuda' else X.astype(np.float32))
+    dataset = TensorDataset(tensor_X)
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=8, pin_memory=True)
 
     loss_por_epoca = []
     best_loss = float('inf')
@@ -63,15 +67,19 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
             for i, batch in enumerate(tqdm(loader, desc=f"Época {epoch+1}/{num_epochs}", leave=True, unit="batch")):
                 inputs = batch[0].to(device, non_blocking=True)
                 optimizer.zero_grad()
-                outputs, _ = model(inputs)
-                loss = criterion(outputs, inputs)
+
+                with autocast():
+                    outputs, _ = model(inputs)
+                    loss = criterion(outputs, inputs)
 
                 if torch.isnan(loss):
                     print(f"Loss virou NaN no batch {i+1}. Abortando.")
                     return model
 
-                loss.backward()
-                optimizer.step()
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+
                 total_loss += loss.item() * inputs.size(0)
 
             avg_loss = total_loss / len(dataset)
@@ -116,13 +124,16 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
 
 def extrair_embeddings(model, X, device='cpu', batch_size=512):
     model.eval()
-    X = torch.tensor(X.astype(np.float32)).to(device)
-    loader = DataLoader(X, batch_size=batch_size, num_workers=12)
+    tensor_X = torch.from_numpy(X.astype(np.float16) if device == 'cuda' else X.astype(np.float32))
+    dataset = TensorDataset(tensor_X)
+    loader = DataLoader(dataset, batch_size=batch_size, num_workers=8, pin_memory=True)
     embeddings = []
 
     with torch.no_grad():
         for batch in loader:
-            _, z = model(batch)
+            inputs = batch[0].to(device, non_blocking=True)
+            with autocast():
+                _, z = model(inputs)
             embeddings.append(z.cpu().numpy())
 
     return np.vstack(embeddings)
