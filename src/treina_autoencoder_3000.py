@@ -17,16 +17,16 @@ class DeepAutoencoder(nn.Module):
             nn.LeakyReLU(0.01),
             nn.Linear(11197, 6000),
             nn.LeakyReLU(0.01),
-            nn.Linear(6000, 3000),
-            nn.LeakyReLU(0.01),
-            nn.Linear(3000, bottleneck_dim),
+            nn.Linear(6000, bottleneck_dim),
+            #nn.LeakyReLU(0.01),
+            #nn.Linear(3000, bottleneck_dim),
             nn.LeakyReLU(0.01)
         )
 
         self.decoder = nn.Sequential(
-            nn.Linear(bottleneck_dim, 3000),
-            nn.LeakyReLU(0.01),
-            nn.Linear(3000, 6000),
+            #nn.Linear(bottleneck_dim, 3000),
+            #nn.LeakyReLU(0.01),
+            nn.Linear(bottleneck_dim, 6000),
             nn.LeakyReLU(0.01),
             nn.Linear(6000, 11197),
             nn.LeakyReLU(0.01),
@@ -50,7 +50,7 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
     X = (X - X.min()) / (X.max() - X.min() + 1e-8)
 
     dataset = TensorDataset(torch.tensor(X))
-    loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=2)
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=12, pin_memory=True)
 
     loss_por_epoca = []
 
@@ -102,7 +102,7 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
 def extrair_embeddings(model, X, device='cpu', batch_size=512):
     model.eval()
     X = torch.tensor(X.astype(np.float32)).to(device)
-    loader = DataLoader(X, batch_size=batch_size, num_workers=0)
+    loader = DataLoader(X, batch_size=batch_size, num_workers=12)
     embeddings = []
 
     with torch.no_grad():
@@ -142,8 +142,8 @@ if __name__ == "__main__":
 
     # Treinamento
     model = treinar_autoencoder(
-        X, input_dim=X.shape[1], bottleneck_dim=1500,
-        batch_size=512, num_epochs=20, device=device
+        X, input_dim=X.shape[1], bottleneck_dim=3000,
+        batch_size=384, num_epochs=20, device=device
     )
 
     # Embeddings
