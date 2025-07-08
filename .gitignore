@@ -41,3 +41,6 @@ dados/
 # Arquivos do sistema operacional
 .DS_Store
 Thumbs.db
+
+# Logs
+src/log.txt
