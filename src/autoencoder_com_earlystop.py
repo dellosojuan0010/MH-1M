@@ -30,7 +30,7 @@ class DeepAutoencoder(nn.Module):
             nn.Linear(6000, 11197),
             nn.LeakyReLU(0.01),
             nn.Linear(11197, input_dim),
-            nn.Sigmoid()
+            nn.Identity()
         )
 
     def forward(self, x):
@@ -40,7 +40,7 @@ class DeepAutoencoder(nn.Module):
 
 def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_epochs=10, device='cpu'):
     model = DeepAutoencoder(input_dim, bottleneck_dim).to(device)
-    criterion = nn.BCELoss()
+    criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
     scaler = torch.amp.GradScaler(device)  # Para mixed precision
 
@@ -48,7 +48,7 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
     X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
     X = (X - X.min()) / (X.max() - X.min() + 1e-8)
 
-    tensor_X = torch.from_numpy(X.astype(np.float16) if device == 'cuda' else X.astype(np.float32))
+    tensor_X = torch.from_numpy(X.astype(np.float32))
     dataset = TensorDataset(tensor_X)
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=8, pin_memory=True)
 
