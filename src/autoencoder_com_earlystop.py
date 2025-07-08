@@ -60,7 +60,7 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
             model.train()
             total_loss = 0.0
 
-            for i, batch in enumerate(tqdm(loader, desc=f"Época {epoch+1}/{num_epochs}", unit="batch")):
+            for i, batch in enumerate(tqdm(loader, desc=f"Época {epoch+1}/{num_epochs}", leave=True, unit="batch")):
                 inputs = batch[0].to(device, non_blocking=True)
                 optimizer.zero_grad()
                 outputs, _ = model(inputs)
@@ -82,6 +82,11 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
                 best_loss = avg_loss
                 best_model = copy.deepcopy(model)
                 contador = 0
+                print("Extraindo embeddings...")
+                embeddings = extrair_embeddings(model, X, device=device)
+                nome_arquivo = f"deep_embeddings_epoch_{epoch+1}.npy"
+                np.save(nome_arquivo, embeddings)
+                print(f"Embeddings salvos: '{nome_arquivo}' (shape: {embeddings.shape})")
             else:
                 contador += 1
                 if contador >= paciencia:
@@ -144,7 +149,7 @@ if __name__ == "__main__":
 
     model = treinar_autoencoder(
         X, input_dim=X.shape[1], bottleneck_dim=3000,
-        batch_size=384, num_epochs=20, device=device
+        batch_size=512, num_epochs=20, device=device
     )
 
     print("Extraindo embeddings...")
