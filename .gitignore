@@ -43,4 +43,5 @@ dados/
 Thumbs.db
 
 # Logs
+log.txt
 src/log.txt
