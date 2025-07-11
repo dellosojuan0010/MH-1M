@@ -32,6 +32,8 @@ dados/
 # Logs e saídas
 *.log
 *.out
+log.txt
+src/log.txt
 
 # IDEs
 .vscode/
@@ -41,7 +43,3 @@ dados/
 # Arquivos do sistema operacional
 .DS_Store
 Thumbs.db
-
-# Logs
-log.txt
-src/log.txt
