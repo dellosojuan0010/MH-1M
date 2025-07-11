@@ -1,4 +1,0 @@
-Namespaces: ['opcodes']
-Amostras por classe: classe0=10000, classe1=10000
-ARI: 0.0603
-NMI: 0.1099

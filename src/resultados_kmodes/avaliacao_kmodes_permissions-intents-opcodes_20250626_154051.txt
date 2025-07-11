@@ -1,4 +1,0 @@
-Namespaces: ['permissions', 'intents', 'opcodes']
-Amostras por classe: classe0=1000, classe1=1000
-ARI: 0.0618
-NMI: 0.1240

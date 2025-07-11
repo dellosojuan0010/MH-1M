@@ -15,13 +15,14 @@ from sklearn.metrics import (
 import tensorflow as tf
 from tensorflow.keras import layers, models, callbacks
 
-# Path para DatasetSelector
-diretorio_atual = os.path.dirname(__file__)
-diretorio_raiz = os.path.abspath(os.path.join(diretorio_atual, '..'))
-sys.path.append(diretorio_raiz)
+#sys.path.append(diretorio_raiz)
+
 from dataset_selector import DatasetSelector
 
 # Diretório base para resultados
+# Path para resultados
+diretorio_atual = os.path.dirname(__file__)
+diretorio_raiz = os.path.abspath(os.path.join(diretorio_atual, '..'))
 resultados_dir = os.path.join(diretorio_raiz, 'resultados')
 os.makedirs(resultados_dir, exist_ok=True)
 
@@ -29,12 +30,16 @@ os.makedirs(resultados_dir, exist_ok=True)
 parser = argparse.ArgumentParser(description="Treinamento MLP com seleção de namespaces")
 parser.add_argument('--namespaces', nargs='+', required=True,
                     help='Lista de namespaces a serem utilizados')
+
 parser.add_argument('--top_features', type=int, default=-1,
                     help='Número de features mais importantes a serem usadas (use -1 para não usar)')
+
 parser.add_argument('--epochs', type=int, default=50,
                     help='Número de épocas de treinamento')
+
 parser.add_argument('--batch_size', type=int, default=32,
                     help='Tamanho do batch')
+
 args = parser.parse_args()
 
 print("\n=== CONFIGURAÇÃO ===")
