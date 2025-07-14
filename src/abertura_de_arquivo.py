@@ -1,13 +1,17 @@
 import numpy as np
 import os
+import gc
+from tqdm import tqdm
+import pandas as pd
+
 
 # Caminho para o arquivo .npz
-#CAMINHO_ARQUIVO = os.path.join("..", "dados", "amex-1M-[intents-permissions-opcodes-apicalls].npz")
+CAMINHO_ARQUIVO = os.path.join("..", "dados", "amex-1M-[intents-permissions-opcodes-apicalls].npz")
 #CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas.npz")
-CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz")
+#CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz")
 
 # Carrega o arquivo .npz
-dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True)
+dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
 print(f"Arquivos: {dados.files}")
 
 print(f"🔢 Shape dos dados: {dados['data'].shape}")
@@ -15,9 +19,34 @@ print(f"🔢 Shape das classes: {dados['classes'].shape}")
 print(f"🔢 Reshape das classes: {dados['classes'].reshape(-1, 1).shape}")
 
 # Acessa diretamente os dados
-X = dados['data'][0:1000, :]  # Exemplo: pega as primeiras 1000 amostras
+X = dados['data']
+y = dados['classes']
+colunas = dados['column_names']
 
-y = dados['classes'].reshape(-1, 1)[0:1000]  # Exemplo: pega as primeiras 1000 classes
+df = pd.DataFrame(X)
+
+chunk_size = 100000
+n_linhas = X.shape[0]
+indices = []
+for i in tqdm(range(0, n_linhas, chunk_size)):
+    fim = min(i + chunk_size, n_linhas)
+    chunk = X[i:fim]
+    df_bloco = pd.DataFrame(chunk)
+    duplicados = df_bloco[df_bloco.duplicated()].index
+    duplicados = duplicados + i
+    indices.extend(duplicados)    
+
+print(len(indices))
+
+#     # Aqui você insere a lógica de processamento
+#     processar(bloco)
+
+# gc.collect()
+X_filtrado = np.delete(X, indices, axis=0)
+y_filtrado = np.delete(y, indices, axis=0)
+
+# print(X_filtrado.shape)
+
 
                                                                                                                                                                                                                                                                                                                                                                                           
 
