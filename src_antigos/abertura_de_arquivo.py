@@ -8,9 +8,10 @@ import pandas as pd
 # Caminho para o arquivo .npz
 #print("Definindo caminho para o arquivo")
 #CAMINHO_ARQUIVO = os.path.join("..", "dados", "amex-1M-[intents-permissions-opcodes-apicalls].npz")
-# CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas.npz")
-CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz")
-#CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_filtrados.npz")
+#CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas.npz") # Não abriu na maquina desktop com GPU
+#CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz") #Não sei quais as instâncias estão aqui
+    #Shape dos dados: (238188, 22394)
+#CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_filtrados.npz") # Não existe na maquina desktop com GPU
 
 
 # Carrega o arquivo .npz
