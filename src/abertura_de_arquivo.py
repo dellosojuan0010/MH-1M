@@ -10,6 +10,7 @@ import pandas as pd
 #CAMINHO_ARQUIVO = os.path.join("..", "dados", "amex-1M-[intents-permissions-opcodes-apicalls].npz")
 # CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas.npz")
 # CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz")
+CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_filtrados.npz")
 
 
 # Carrega o arquivo .npz
