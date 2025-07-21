@@ -25,6 +25,12 @@ dados/
 *.pkl
 *.joblib
 
+# Resultados e saídas
+resultados/
+resultados_antigos/
+
+
+
 # Notebooks e checkpoints
 .ipynb_checkpoints/
 *.ipynb

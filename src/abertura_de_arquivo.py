@@ -9,24 +9,25 @@ import pandas as pd
 #print("Definindo caminho para o arquivo")
 #CAMINHO_ARQUIVO = os.path.join("..", "dados", "amex-1M-[intents-permissions-opcodes-apicalls].npz")
 # CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas.npz")
-# CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz")
-CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_filtrados.npz")
+CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz")
+#CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_filtrados.npz")
 
 
 # Carrega o arquivo .npz
-# print("Abrindo o arquivo")
-# dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
-# print(f"Arquivos: {dados.files}")
+print("Abrindo o arquivo")
+dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
+print(f"Arquivos: {dados.files}")
 
-# print(f"🔢 Shape dos dados: {dados['data'].shape}")
-# print(f"🔢 Shape das classes: {dados['classes'].shape}")
-# print(f"🔢 Reshape das classes: {dados['classes'].reshape(-1, 1).shape}")
+print(f"Shape dos dados: {dados['data'].shape}")
+print(f"Shape das classes: {dados['classes'].shape}")
+print(f"Reshape das classes: {dados['classes'].reshape(-1, 1).shape}")
 
 # Acessa diretamente os dados
-# print("Carregando os dados")
-# X = dados['data']
-# y = dados['classes']
-# colunas = dados['column_names']
+print("Carregando os dados")
+X = dados['data']
+y = dados['classes']
+colunas = dados['column_names']
+
 
 # df = pd.DataFrame(X) # Não necessário agora pois vamos usar ainda o X
 
@@ -133,29 +134,3 @@ CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_filtrados.npz")
 # # Exibe informações
 # print(f"🔢 Shape da matriz resultante: {X_apicalls_com_classe.shape}")
 # print(f"📋 Primeiros nomes de colunas: {nomes_apicalls_com_classe[:5]} ...")
-
-# ===================================
-dados = np.load('dados_filtrados.npz', allow_pickle=True,mmap_mode='r')
-X = dados['data']
-y = dados['classes']
-colunas = dados['column_names']
-
-indices = []
-for i in tqdm(range(X.shape[0]),"Buscando"):
-  for j in range(i,X.shape[0]):
-    if j in indices:
-      continue
-    if (X[j] == X[i]).all:
-      indices.append(j)
-
-with open('indices_finais.txt', 'w') as f:
-  for item in indices:
-    f.write("%s\n" % item)
-
-# df = pd.DataFrame(X)
-# duplicados = df[df.duplicated()].index
-
-#X = np.delete(X, duplicados, axis=0)
-#y = np.delete(y, duplicados, axis=0)
-
-#np.savez_compressed("dados_filtrados_novos.npz", data=X, classes=y, column_names=colunas)
