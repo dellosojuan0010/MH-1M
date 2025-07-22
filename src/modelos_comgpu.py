@@ -1,3 +1,10 @@
+###
+#
+# ESSE MODELO SERIA PARA USAR TENSORFLOW, A GPU DO DESKTOP DO LAB SÓ RODOU COM PYTORCH
+#
+###
+
+
 # Parte 1 - Importação das bibliotecas
 
 #from google.colab import drive
