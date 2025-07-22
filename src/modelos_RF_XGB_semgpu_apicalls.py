@@ -122,11 +122,11 @@ print(f" - df_api: {df_api.shape}")
 
 # 5. Função para definir modelos adaptados apenas que usaram o sklearn
 def definir_modelos_sklearn(input_dim):
-    if input_dim > 22000:
+    if input_dim > 20000:
         #svm = SVC(kernel='rbf', C=0.5, gamma='scale', probability=True, random_state=42, verbose=True)
         rf = RandomForestClassifier(n_estimators=200, max_depth=20, random_state=42)
         xgb = XGBClassifier(n_estimators=200, max_depth=10, learning_rate=0.05, verbosity=1, use_label_encoder=False, random_state=42)
-    elif input_dim > 500:
+    elif input_dim > 400:
         #svm = SVC(kernel='rbf', C=1.0, gamma='scale', probability=True, random_state=42, verbose=True)
         rf = RandomForestClassifier(n_estimators=100, max_depth=15, random_state=42)
         xgb = XGBClassifier(n_estimators=150, max_depth=8, learning_rate=0.07, verbosity=1, use_label_encoder=False, random_state=42)
