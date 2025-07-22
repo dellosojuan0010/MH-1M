@@ -253,3 +253,11 @@ df_resultados.to_csv(caminho_saida, index=False)
 # Parte 8.3 - Exibir resumo final das métricas
 print("\nResumo final (médias por grupo, modelo e classe):")
 print(df_resultados.groupby(['grupo_de_features', 'modelo', 'classe'])[['precision', 'recall', 'f1_score']].mean().round(4))
+
+# Calcula e salva o resumo
+resumo = df_resultados.groupby(['grupo_de_features', 'modelo', 'classe'])[['precision', 'recall', 'f1_score']].mean().round(4)
+resumo.to_csv(os.path.join(pasta_saida, 'resumo_resultados.csv'))
+
+# Exibe o resumo no terminal
+print("\nResumo final (médias por grupo, modelo e classe):")
+print(resumo)
