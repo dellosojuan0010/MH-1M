@@ -25,7 +25,7 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import StandardScaler
@@ -72,8 +72,8 @@ idx_opcodes     = [i for i, nome in enumerate(colunas) if nome.startswith("opcod
 idx_apicalls    = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
 
 # Criação dos DataFrames
-df_all  = pd.DataFrame(X, columns=colunas)
-df_all['classe'] = y
+# df_all  = pd.DataFrame(X, columns=colunas)
+# df_all['classe'] = y
 
 df_p    = pd.DataFrame(X[:, idx_permissions], columns=np.array(colunas)[idx_permissions])
 df_p['classe'] = y
@@ -84,15 +84,19 @@ df_i['classe'] = y
 df_op   = pd.DataFrame(X[:, idx_opcodes], columns=np.array(colunas)[idx_opcodes])
 df_op['classe'] = y
 
-df_api  = pd.DataFrame(X[:, idx_apicalls], columns=np.array(colunas)[idx_apicalls])
-df_api['classe'] = y
+# df_po    = pd.DataFrame(X[:, idx_permissions + idx_opcodes], columns=np.array(colunas)[idx_permissions + idx_opcodes])
+# df_po['classe'] = y
+
+# df_api  = pd.DataFrame(X[:, idx_apicalls], columns=np.array(colunas)[idx_apicalls])
+# df_api['classe'] = y
 
 print("DataFrames criados:")
-print(f" - df_all: {df_all.shape}")
+#print(f" - df_all: {df_all.shape}")
 print(f" - df_p  : {df_p.shape}")
 print(f" - df_i  : {df_i.shape}")
 print(f" - df_op : {df_op.shape}")
-print(f" - df_api: {df_api.shape}")
+#print(f" - df_po : {df_po.shape}")
+#print(f" - df_api: {df_api.shape}")
 
 
 # Parte 4 - Criação da função para MLP Keras
@@ -234,6 +238,7 @@ df_resultados = pd.concat([
     avaliar_modelos_em_dataframe(df_p, 'permissions'),
     avaliar_modelos_em_dataframe(df_i, 'intents'),
     avaliar_modelos_em_dataframe(df_op, 'opcodes'),
+    #avaliar_modelos_em_dataframe(df_po, 'permissions_opcodes'),
     #avaliar_modelos_em_dataframe(df_api, 'apicalls'),
     #avaliar_modelos_em_dataframe(df_all, 'all')
     ], ignore_index=True)
@@ -243,7 +248,7 @@ df_resultados = pd.concat([
 
 # Parte 8.1 - Criação das pastas de resultados
 agora = datetime.now().strftime('%d%m%Y_%H%M')
-pasta_saida = os.path.join("..", "resultados", f"resultado_RF_XGB_sem_gpu_PIO_{agora}")
+pasta_saida = os.path.join("..", "resultados", "amostras_reduzidas_balanceadas", f"resultado_RF_XGB_sem_gpu_PIO_{agora}")
 os.makedirs(pasta_saida, exist_ok=True)
 
 # Parte 8.2 - Exportar os dados
