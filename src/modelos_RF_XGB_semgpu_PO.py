@@ -66,8 +66,8 @@ print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 # Parte 3 - Separar as colunas das features e criar os DataFrames
 
 # Identificar colunas por namespace
-# idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
-idx_intents     = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
+idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
+# idx_intents     = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
 idx_opcodes     = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
 # idx_apicalls    = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
 
