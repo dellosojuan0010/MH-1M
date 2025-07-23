@@ -67,9 +67,9 @@ print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 
 # Identificar colunas por namespace
 # idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
-# idx_intents     = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
-# idx_opcodes     = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
-idx_apicalls    = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
+idx_intents     = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
+idx_opcodes     = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
+# idx_apicalls    = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
 
 # Criação dos DataFrames
 # df_all  = pd.DataFrame(X, columns=colunas)
@@ -78,21 +78,26 @@ idx_apicalls    = [i for i, nome in enumerate(colunas) if nome.startswith("apica
 # df_p    = pd.DataFrame(X[:, idx_permissions], columns=np.array(colunas)[idx_permissions])
 # df_p['classe'] = y
 
+
 # df_i    = pd.DataFrame(X[:, idx_intents], columns=np.array(colunas)[idx_intents])
 # df_i['classe'] = y
+
+df_po    = pd.DataFrame(X[:, idx_permissions + idx_opcodes], columns=np.array(colunas)[idx_permissions + idx_opcodes])
+df_po['classe'] = y
 
 # df_op   = pd.DataFrame(X[:, idx_opcodes], columns=np.array(colunas)[idx_opcodes])
 # df_op['classe'] = y
 
-df_api  = pd.DataFrame(X[:, idx_apicalls], columns=np.array(colunas)[idx_apicalls])
-df_api['classe'] = y
+# df_api  = pd.DataFrame(X[:, idx_apicalls], columns=np.array(colunas)[idx_apicalls])
+# df_api['classe'] = y
 
 print("DataFrames criados:")
 # print(f" - df_all: {df_all.shape}")
 # print(f" - df_p  : {df_p.shape}")
 # print(f" - df_i  : {df_i.shape}")
 # print(f" - df_op : {df_op.shape}")
-print(f" - df_api: {df_api.shape}")
+print(f" - df_po : {df_po.shape}")
+# print(f" - df_api: {df_api.shape}")
 
 
 # Parte 4 - Criação da função para MLP Keras
@@ -124,16 +129,16 @@ print(f" - df_api: {df_api.shape}")
 def definir_modelos_sklearn(input_dim):
     if input_dim > 20000:
         #svm = SVC(kernel='rbf', C=0.5, gamma='scale', probability=True, random_state=42, verbose=True)
-        rf = RandomForestClassifier(n_estimators=200, max_depth=20, random_state=42, n_jobs=-1)
-        xgb = XGBClassifier(n_estimators=200, max_depth=10, learning_rate=0.05, verbosity=1, use_label_encoder=False, random_state=42, n_jobs=-1)
+        rf = RandomForestClassifier(n_estimators=200, max_depth=20, random_state=42)
+        xgb = XGBClassifier(n_estimators=200, max_depth=10, learning_rate=0.05, verbosity=1, use_label_encoder=False, random_state=42)
     elif input_dim > 400:
         #svm = SVC(kernel='rbf', C=1.0, gamma='scale', probability=True, random_state=42, verbose=True)
-        rf = RandomForestClassifier(n_estimators=100, max_depth=15, random_state=42, n_jobs=-1)
-        xgb = XGBClassifier(n_estimators=150, max_depth=8, learning_rate=0.07, verbosity=1, use_label_encoder=False, random_state=42, n_jobs=-1)
+        rf = RandomForestClassifier(n_estimators=100, max_depth=15, random_state=42)
+        xgb = XGBClassifier(n_estimators=150, max_depth=8, learning_rate=0.07, verbosity=1, use_label_encoder=False, random_state=42)
     else:
         #svm = SVC(kernel='rbf', C=2.0, gamma='auto', probability=True, random_state=42, verbose=True)
-        rf = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42, n_jobs=-1)
-        xgb = XGBClassifier(n_estimators=100, max_depth=6, learning_rate=0.1, verbosity=1, use_label_encoder=False, random_state=42, n_jobs=-1)
+        rf = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
+        xgb = XGBClassifier(n_estimators=100, max_depth=6, learning_rate=0.1, verbosity=1, use_label_encoder=False, random_state=42)
 
     #return {'SVM': svm, 'RandomForest': rf, 'XGBoost': xgb}
     return {'RandomForest': rf, 'XGBoost': xgb}
@@ -234,7 +239,8 @@ df_resultados = pd.concat([
     #avaliar_modelos_em_dataframe(df_p, 'permissions'),
     #avaliar_modelos_em_dataframe(df_i, 'intents'),
     #avaliar_modelos_em_dataframe(df_op, 'opcodes'),
-    avaliar_modelos_em_dataframe(df_api, 'apicalls'),
+    avaliar_modelos_em_dataframe(df_po, 'permissions_opcodes'),
+    #avaliar_modelos_em_dataframe(df_api, 'apicalls'),
     #avaliar_modelos_em_dataframe(df_all, 'all')
     ], ignore_index=True)
 
@@ -243,7 +249,7 @@ df_resultados = pd.concat([
 
 # Parte 8.1 - Criação das pastas de resultados
 agora = datetime.now().strftime('%d%m%Y_%H%M')
-pasta_saida = os.path.join("..", "resultados", "amostras_reduzidas_balanceadas",f"resultado_RF_XGB_sem_gpu_apicalls_{agora}")
+pasta_saida = os.path.join("..", "resultados", "amostras_reduzidas_balanceadas", f"resultado_RF_XGB_sem_gpu_PO_{agora}")
 os.makedirs(pasta_saida, exist_ok=True)
 
 # Parte 8.2 - Exportar os dados
