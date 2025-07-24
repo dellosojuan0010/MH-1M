@@ -49,3 +49,4 @@ src/log.txt
 # Arquivos do sistema operacional
 .DS_Store
 Thumbs.db
+.DS_Store
