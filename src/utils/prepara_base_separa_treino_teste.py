@@ -57,22 +57,22 @@ CAMINHO_ARQUIVO_SAIDA_CLASSES_TESTE = os.path.join("..", "..", "dados", "classes
 
 CAMINHO_ARQUIVO_SAIDA_TREINO_TESTE_COMPRIMIDO = os.path.join("..","..","dados","dados_treino_teste.npz")
 
-print(f"Salvando arquivo de colunas em {CAMINHO_ARQUIVO_SAIDA_COLUNAS}...")
-np.save_to_csv(CAMINHO_ARQUIVO_SAIDA_COLUNAS, colunas, delimiter=',')
+# print(f"Salvando arquivo de colunas em {CAMINHO_ARQUIVO_SAIDA_COLUNAS}...")
+# np.savetxt(CAMINHO_ARQUIVO_SAIDA_COLUNAS, colunas, delimiter=',', fmt="%s")
 
-# Save the training data
-print(f"Salvando arquivo de dados de treino em {CAMINHO_ARQUIVO_SAIDA_DADOS_TREINO}...")
-np.save_to_csv(CAMINHO_ARQUIVO_SAIDA_DADOS_TREINO, X_train, delimiter=',')
-print(f"Salvando arquivo de classes de treino em {CAMINHO_ARQUIVO_SAIDA_CLASSES_TREINO}...")
-np.save_to_csv(CAMINHO_ARQUIVO_SAIDA_CLASSES_TREINO, y_train, delimiter=',')
+# # Save the training data
+# print(f"Salvando arquivo de dados de treino em {CAMINHO_ARQUIVO_SAIDA_DADOS_TREINO}...")
+# np.savetxt(CAMINHO_ARQUIVO_SAIDA_DADOS_TREINO, X_train, delimiter=',', fmt="%d")
+# print(f"Salvando arquivo de classes de treino em {CAMINHO_ARQUIVO_SAIDA_CLASSES_TREINO}...")
+# np.savetxt(CAMINHO_ARQUIVO_SAIDA_CLASSES_TREINO, y_train, delimiter=',', fmt="%d")
 
-# Save the testing data
-print(f"Salvando arquivo de dados de treino em {CAMINHO_ARQUIVO_SAIDA_DADOS_TESTE}...")
-np.save_to_csv(CAMINHO_ARQUIVO_SAIDA_DADOS_TESTE, X_test, delimiter=',')
-print(f"Salvando arquivo de classes de treino em {CAMINHO_ARQUIVO_SAIDA_CLASSES_TESTE}...")
-np.save_to_csv(CAMINHO_ARQUIVO_SAIDA_CLASSES_TESTE, y_test, delimiter=',')
+# # Save the testing data
+# print(f"Salvando arquivo de dados de teste em {CAMINHO_ARQUIVO_SAIDA_DADOS_TESTE}...")
+# np.savetxt(CAMINHO_ARQUIVO_SAIDA_DADOS_TESTE, X_test, delimiter=',', fmt="%d")
+# print(f"Salvando arquivo de classes de teste em {CAMINHO_ARQUIVO_SAIDA_CLASSES_TESTE}...")
+# np.savetxt(CAMINHO_ARQUIVO_SAIDA_CLASSES_TESTE, y_test, delimiter=',', fmt="%d")
 
-print(f"Salvando arquivo todos os comprimidos de treino em {CAMINHO_ARQUIVO_SAIDA_TREINO_TESTE_COMPRIMIDO}...")
+print(f"Salvando arquivo todos os comprimidos de treino e teste em {CAMINHO_ARQUIVO_SAIDA_TREINO_TESTE_COMPRIMIDO}...")
 np.savez_compressed(
     CAMINHO_ARQUIVO_SAIDA_TREINO_TESTE_COMPRIMIDO,
     X_train=X_train,

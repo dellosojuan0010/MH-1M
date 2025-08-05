@@ -105,13 +105,13 @@ if __name__ == "__main__":
 
     print(f"Quantidade de cada classe: {np.unique(y)}")
 
-    # model = treinar_autoencoder(
-    #     X, input_dim=X.shape[1], bottleneck_dim=6000,
-    #     hidden_ratio=0.3, batch_size=256, num_epochs=1
-    # )
+    model = treinar_autoencoder(
+        X, input_dim=X.shape[1], bottleneck_dim=6000,
+        hidden_ratio=0.3, batch_size=256, num_epochs=1
+    )
 
-    # print("🎯 Extraindo embeddings...")
-    # embeddings = extrair_embeddings(model, X)
+    print("🎯 Extraindo embeddings...")
+    embeddings = extrair_embeddings(model, X)
 
     # np.save("embeddings.npy", embeddings)
     # print(f"Embeddings salvos! Shape: {embeddings.shape}")

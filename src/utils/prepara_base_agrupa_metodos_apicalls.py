@@ -40,25 +40,25 @@ print("Índices de grupos de features definidos")
 
 # Define uma lista de api calls
 print("Criando um dicionário de grupos de API Calls...")
-apicalls = {}
+metodos = {}
 for i, c in enumerate(colunas[idx_apicalls]):  
-  nome_do_grupo = c.split(".")[0]  
-  if nome_do_grupo not in apicalls:
-    apicalls[nome_do_grupo] = [idx_apicalls[i]]
+  nome_do_metodo = c.split(".")[1]  
+  if nome_do_metodo not in metodos:
+    metodos[nome_do_metodo] = [idx_apicalls[i]]
   else:
-    apicalls[nome_do_grupo].append(idx_apicalls[i])
+    metodos[nome_do_metodo].append(idx_apicalls[i])
 
-print(f"Total de API calls grupos únicos: {len(apicalls)}")
+print(f"Total de API calls grupos únicos: {len(metodos)}")
 
 print("Criando uma estrutura para manter os valores de API Calls agrupados...")
-X_apicalls = np.zeros((X.shape[0],len(apicalls)),dtype=np.int8)
-print(X_apicalls.shape)
+X_metodos = np.zeros((X.shape[0],len(metodos)),dtype=np.int8)
+print(X_metodos.shape)
 
 print("Iterando sobre os grupos e somando as colunas de cada grupo...")
-for i, grupo in enumerate(apicalls):
-    idxs_grupo = apicalls[grupo]           # pega os índices das colunas do grupo
+for i, grupo in enumerate(metodos):
+    idxs_grupo = metodos[grupo]           # pega os índices das colunas do grupo
     soma = np.sum(X[:, idxs_grupo], axis=1)     # soma horizontalmente por linha
-    X_apicalls[:,i] = soma             # adiciona o vetor soma na lista
+    X_metodos[:,i] = soma             # adiciona o vetor soma na lista
 
 print("Removendo as colunas de API Calls originais...")
 X = np.delete(X, idx_apicalls, axis=1)
@@ -67,8 +67,8 @@ print(X.shape)
 print(colunas.shape)
 gc.collect()
 print("Concatenando as novas colunas calculadas...")
-X = np.concatenate((X, X_apicalls), axis=1)
-colunas = np.concatenate((colunas, list(apicalls.keys())))
+X = np.concatenate((X, X_metodos), axis=1)
+colunas = np.concatenate((colunas, list(metodos.keys())))
 print(X.shape)
 print(colunas.shape)
 
@@ -83,15 +83,15 @@ print(f"Training data shape: {X_train.shape}, {y_train.shape}")
 print(f"Testing data shape: {X_test.shape}, {y_test.shape}")
 
 print("Salvando em CSV...");
-CAMINHO_ARQUIVO_SAIDA_COLUNAS = os.path.join("..", "..", "dados", "colunas_apicalls_agrupadas.csv")
+CAMINHO_ARQUIVO_SAIDA_COLUNAS = os.path.join("..", "..", "dados", "colunas_metodos_apicalls_agrupadas.csv")
 
-CAMINHO_ARQUIVO_SAIDA_DADOS_TREINO = os.path.join("..", "..", "dados", "dados_treino_apicalls_agrupadas.csv")
-CAMINHO_ARQUIVO_SAIDA_CLASSES_TREINO = os.path.join("..", "..", "dados", "classes_treino_apicalls_agrupadas.csv")
+CAMINHO_ARQUIVO_SAIDA_DADOS_TREINO = os.path.join("..", "..", "dados", "dados_treino_metodos_apicalls_agrupadas.csv")
+CAMINHO_ARQUIVO_SAIDA_CLASSES_TREINO = os.path.join("..", "..", "dados", "classes_treino_metodos_apicalls_agrupadas.csv")
 
-CAMINHO_ARQUIVO_SAIDA_DADOS_TESTE = os.path.join("..", "..", "dados", "dados_teste_apicalls_agrupadas.csv")
-CAMINHO_ARQUIVO_SAIDA_CLASSES_TESTE = os.path.join("..", "..", "dados", "classes_teste_apicalls_agrupadas.csv")
+CAMINHO_ARQUIVO_SAIDA_DADOS_TESTE = os.path.join("..", "..", "dados", "dados_teste_metodos_apicalls_agrupadas.csv")
+CAMINHO_ARQUIVO_SAIDA_CLASSES_TESTE = os.path.join("..", "..", "dados", "classes_teste_metodos_apicalls_agrupadas.csv")
 
-CAMINHO_ARQUIVO_SAIDA_TREINO_TESTE_COMPRIMIDO = os.path.join("..","..","dados","dados_treino_teste_apicalls_agrupadas.npz")
+CAMINHO_ARQUIVO_SAIDA_TREINO_TESTE_COMPRIMIDO = os.path.join("..","..","dados","dados_treino_teste_metodos_apicalls_agrupadas.npz")
 
 # print(f"Salvando arquivo de colunas em {CAMINHO_ARQUIVO_SAIDA_COLUNAS}...")
 # np.savetxt(CAMINHO_ARQUIVO_SAIDA_COLUNAS, colunas, delimiter=',', fmt="%d")
