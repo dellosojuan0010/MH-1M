@@ -54,7 +54,7 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
 
     loss_por_epoca = []
 
-    print(f"🚀 Iniciando treinamento: {input_dim} → {bottleneck_dim}")
+    print(f"Iniciando treinamento: {input_dim} → {bottleneck_dim}")
     try:
         for epoch in range(num_epochs):
             model.train()
@@ -79,7 +79,7 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
 
         # Salvar histórico
         np.savetxt("loss_por_epoca.csv", loss_por_epoca, delimiter=",")
-        print("✅ Loss por época salva: 'loss_por_epoca.csv'")
+        print("Loss por época salva: 'loss_por_epoca.csv'")
 
         try:
             plt.figure()
@@ -92,10 +92,10 @@ def treinar_autoencoder(X, input_dim, bottleneck_dim=1500, batch_size=128, num_e
             plt.close()
             print("📊 Gráfico da loss salvo em 'curva_loss.png'")
         except Exception as e:
-            print("⚠️ Não foi possível salvar gráfico da loss:", e)
+            print("Não foi possível salvar gráfico da loss:", e)
 
     except Exception as e:
-        print(f"❌ Erro durante treinamento: {e}")
+        print(f"Erro durante treinamento: {e}")
 
     return model
 
@@ -121,24 +121,24 @@ if __name__ == "__main__":
     #X, feature_names, y = ds.select_random_classes(['apicalls'], total_samples=119094)
     
     # Carregar dados
-    print("🔄 Carregando dados...")
+    print("Carregando dados...")
     caminho_arquivo = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz")
     dados = np.load(caminho_arquivo, allow_pickle=True)
     X = dados['data']
     y = dados['classes']
     colunas = dados['column_names']
     
-    print(f"✅ Dados carregados: X={X.shape}, y={y.shape}")
-    print(f"🔍 Classes únicas: {np.unique(y)}")
+    print(f"Dados carregados: X={X.shape}, y={y.shape}")
+    print(f"Classes únicas: {np.unique(y)}")
 
     #Dispositivo
     device = "cuda" if torch.cuda.is_available() else "cpu"
     if device == "cuda":
-        print("🚀 GPU disponível! Usando CUDA.")        
+        print("GPU disponível! Usando CUDA.")        
     else:
-        print("⚠️ GPU não disponível. Usando CPU.")
+        print("GPU não disponível. Usando CPU.")
         raise RuntimeError("GPU não disponível. Treinamento não pode prosseguir.")
-    print(f"🖥️ Usando dispositivo: {device.upper()}")
+    print(f"Usando dispositivo: {device.upper()}")
 
     # Treinamento
     model = treinar_autoencoder(
@@ -147,8 +147,8 @@ if __name__ == "__main__":
     )
 
     # Embeddings
-    print("🎯 Extraindo embeddings...")
+    print("Extraindo embeddings...")
     embeddings = extrair_embeddings(model, X, device=device)
 
     np.save("deep_embeddings.npy", embeddings)
-    print(f"✅ Embeddings salvos: 'deep_embeddings.npy' (shape: {embeddings.shape})")
+    print(f"Embeddings salvos: 'deep_embeddings.npy' (shape: {embeddings.shape})")
