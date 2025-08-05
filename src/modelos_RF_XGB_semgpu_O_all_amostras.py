@@ -44,8 +44,8 @@ from xgboost import XGBClassifier
 
 # Caminho para o arquivo compactado
 #CAMINHO_ARQUIVO = '/content/drive/MyDrive/dados_MH1M/dados_undersampling_duplicados_eliminados_para_autoencoder.npz'
-CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_undersampling_duplicados_eliminados_para_autoencoder.npz")
-
+#CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_undersampling_duplicados_eliminados_para_autoencoder.npz")
+CAMINHO_ARQUIVO = os.path.join("..", "dados", "amex-1M-[intents-permissions-opcodes-apicalls].npz")
 # Carrega os dados com mmap_mode para uso mais leve de memória
 dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
 
@@ -55,48 +55,49 @@ y = dados['classes']
 colunas = dados['column_names']
 
 # Embaralhar X e y
-rng = np.random.default_rng(42)  # garante reprodutibilidade
-idx_final = rng.permutation(X.shape[0])  # embaralha os índices
+# rng = np.random.default_rng(42)  # garante reprodutibilidade
+# idx_final = rng.permutation(X.shape[0])  # embaralha os índices
 
-X = X[idx_final]
-y = y[idx_final]
+# X = X[idx_final]
+# y = y[idx_final]
 
 print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 
 # Parte 3 - Separar as colunas das features e criar os DataFrames
 
 # Identificar colunas por namespace
-idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
-idx_intents     = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
+# idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
+# idx_intents     = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
 idx_opcodes     = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
-idx_apicalls    = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
+# idx_apicalls    = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
 
 # Criação dos DataFrames
 # df_all  = pd.DataFrame(X, columns=colunas)
 # df_all['classe'] = y
 
-df_p    = pd.DataFrame(X[:, idx_permissions], columns=np.array(colunas)[idx_permissions])
-df_p['classe'] = y
+# df_p    = pd.DataFrame(X[:, idx_permissions], columns=np.array(colunas)[idx_permissions])
+# df_p['classe'] = y
 
-df_i    = pd.DataFrame(X[:, idx_intents], columns=np.array(colunas)[idx_intents])
-df_i['classe'] = y
 
-df_op   = pd.DataFrame(X[:, idx_opcodes], columns=np.array(colunas)[idx_opcodes])
-df_op['classe'] = y
+# df_i    = pd.DataFrame(X[:, idx_intents], columns=np.array(colunas)[idx_intents])
+# df_i['classe'] = y
 
 # df_po    = pd.DataFrame(X[:, idx_permissions + idx_opcodes], columns=np.array(colunas)[idx_permissions + idx_opcodes])
 # df_po['classe'] = y
+
+df_op   = pd.DataFrame(X[:, idx_opcodes], columns=np.array(colunas)[idx_opcodes])
+df_op['classe'] = y
 
 # df_api  = pd.DataFrame(X[:, idx_apicalls], columns=np.array(colunas)[idx_apicalls])
 # df_api['classe'] = y
 
 print("DataFrames criados:")
-#print(f" - df_all: {df_all.shape}")
-print(f" - df_p  : {df_p.shape}")
-print(f" - df_i  : {df_i.shape}")
+# print(f" - df_all: {df_all.shape}")
+# print(f" - df_p  : {df_p.shape}")
+# print(f" - df_i  : {df_i.shape}")
 print(f" - df_op : {df_op.shape}")
-#print(f" - df_po : {df_po.shape}")
-#print(f" - df_api: {df_api.shape}")
+# print(f" - df_po : {df_po.shape}")
+# print(f" - df_api: {df_api.shape}")
 
 
 # Parte 4 - Criação da função para MLP Keras
@@ -235,10 +236,10 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, n_splits=5):
 
 # 7. Executar para todos os grupos
 df_resultados = pd.concat([
-    avaliar_modelos_em_dataframe(df_p, 'permissions'),
-    avaliar_modelos_em_dataframe(df_i, 'intents'),
+    #avaliar_modelos_em_dataframe(df_p, 'permissions'),
+    #avaliar_modelos_em_dataframe(df_i, 'intents'),
     avaliar_modelos_em_dataframe(df_op, 'opcodes'),
-    #avaliar_modelos_em_dataframe(df_po, 'permissions_opcodes'),
+    # avaliar_modelos_em_dataframe(df_po, 'permissions_opcodes'),
     #avaliar_modelos_em_dataframe(df_api, 'apicalls'),
     #avaliar_modelos_em_dataframe(df_all, 'all')
     ], ignore_index=True)
@@ -248,7 +249,7 @@ df_resultados = pd.concat([
 
 # Parte 8.1 - Criação das pastas de resultados
 agora = datetime.now().strftime('%d%m%Y_%H%M')
-pasta_saida = os.path.join("..", "resultados", f"resultado_RF_XGB_sem_gpu_PIO_{agora}")
+pasta_saida = os.path.join("..", "resultados", "todas_as_amostras", f"resultado_RF_XGB_sem_gpu_O_all_amostras_{agora}")
 os.makedirs(pasta_saida, exist_ok=True)
 
 # Parte 8.2 - Exportar os dados

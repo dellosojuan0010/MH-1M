@@ -6,12 +6,11 @@ import pandas as pd
 
 
 # Caminho para o arquivo .npz
-#print("Definindo caminho para o arquivo")
-#CAMINHO_ARQUIVO = os.path.join("..", "dados", "amex-1M-[intents-permissions-opcodes-apicalls].npz")
-#CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas.npz") # Não abriu na maquina desktop com GPU
-#CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz") #Não sei quais as instâncias estão aqui
-    #Shape dos dados: (238188, 22394)
-#CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_filtrados.npz") # Não existe na maquina desktop com GPU
+print("Definindo caminho para o arquivo")
+CAMINHO_ARQUIVO = os.path.join("..", "dados", "amex-1M-[intents-permissions-opcodes-apicalls].npz")
+#CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas.npz")
+#CAMINHO_ARQUIVO = os.path.join("..", "dados", "amostras_balanceadas_apicalls.npz") 
+#CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_filtrados.npz")
 
 
 # Carrega o arquivo .npz
@@ -19,16 +18,18 @@ print("Abrindo o arquivo")
 dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
 print(f"Arquivos: {dados.files}")
 
-print(f"Shape dos dados: {dados['data'].shape}")
-print(f"Shape das classes: {dados['classes'].shape}")
-print(f"Reshape das classes: {dados['classes'].reshape(-1, 1).shape}")
-
 # Acessa diretamente os dados
-print("Carregando os dados")
+# print("Carregando os dados")
 X = dados['data']
 y = dados['classes']
 colunas = dados['column_names']
 
+print(f"Shape dos dados: {X.shape}")
+print(f"Shape das classes: {y.shape}")
+
+_, _, z = np.unique(y)
+
+print(z)
 
 # df = pd.DataFrame(X) # Não necessário agora pois vamos usar ainda o X
 
