@@ -46,6 +46,13 @@ y = y[idx_final]
 
 print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 
+# ======= Parte 8 - Criação das pastas de resultados (FEITO ANTES DA AVALIAÇÃO) =======
+
+agora = datetime.now().strftime('%d%m%Y_%H%M')
+pasta_saida = os.path.join("..", "resultadosAMMD2", "amostras_reduzidas_balanceadas", f"resultado_RF_XGB_PO_{agora}")
+os.makedirs(pasta_saida, exist_ok=True)
+
+
 # Parte 3 - Separar as colunas das features e criar os DataFrames
 
 # Identificar colunas por namespace
@@ -149,13 +156,6 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
 
     print(f"\nAvaliação concluída para o grupo: {nome_grupo}")
     return pd.DataFrame(resultados)
-
-
-# ======= Parte 8 - Criação das pastas de resultados (FEITO ANTES DA AVALIAÇÃO) =======
-
-agora = datetime.now().strftime('%d%m%Y_%H%M')
-pasta_saida = os.path.join("..", "resultados", "amostras_reduzidas_balanceadas", f"resultado_RF_XGB_sem_gpu_PO_{agora}")
-os.makedirs(pasta_saida, exist_ok=True)
 
 
 # Parte 7 - Executar o modelo e recuperar os resultados para cada DataFrame
