@@ -27,7 +27,7 @@ from xgboost import XGBClassifier
 
 # Parte 2 - Abertura do arquivo, recuperação dos dados e embaralhamento
 
-CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_undersampling_duplicados_eliminados_para_autoencoder.npz")
+CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_undersampling_duplicados_eliminados.npz")
 
 # Carrega os dados com mmap_mode para uso mais leve de memória
 dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
@@ -126,7 +126,7 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
             pd.DataFrame(cm, index=["true_0", "true_1"], columns=["pred_0", "pred_1"]).to_csv(caminho_cm_csv, index=True)
 
             # Salvar figura da matriz de confusão do experimento
-            disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[0, 1])
+            disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['benigno', 'maligno'])
             fig, ax = plt.subplots(figsize=(4, 4), dpi=120)
             disp.plot(ax=ax, values_format='d', colorbar=False)
             ax.set_title(f"{nome_grupo} - {modelo_nome} - Fold {fold}")
