@@ -105,6 +105,10 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
 
         print(f"\nModelo: {modelo_nome} - Total de folds: {n_splits}")
 
+        # acumuladores para a MATRIZ MACRO (agregada) do modelo
+        y_true_all_folds = []
+        y_pred_all_folds = []
+
         for fold, (train_idx, test_idx) in enumerate(skf.split(X, y), start=1):
             print(f"Treinando {modelo_nome} - Fold {fold}")
             X_train, X_test = X[train_idx], X[test_idx]
@@ -113,6 +117,10 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
             modelo.fit(X_train, y_train)
             y_pred = modelo.predict(X_test).astype(int)
 
+            # acumula para a matriz macro
+            y_true_all_folds.append(y_test)
+            y_pred_all_folds.append(y_pred)
+
             acc = accuracy_score(y_test, y_pred)
             report = classification_report(y_test, y_pred, output_dict=True, zero_division=0)
             print(report)
@@ -120,12 +128,12 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
             # ===== MATRIZ DE CONFUSÃO (2x2 com labels fixos) =====
             cm = confusion_matrix(y_test, y_pred, labels=[0, 1])
 
-            # Salvar CSV da matriz de confusão do experimento
+            # Salvar CSV da matriz de confusão do experimento (fold)
             nome_base = f"{nome_grupo}__{modelo_nome}__fold{fold}"
             caminho_cm_csv = os.path.join(pasta_cm, f"{nome_base}.csv")
             pd.DataFrame(cm, index=["true_0", "true_1"], columns=["pred_0", "pred_1"]).to_csv(caminho_cm_csv, index=True)
 
-            # Salvar figura da matriz de confusão do experimento
+            # Salvar figura da matriz de confusão do experimento (fold)
             disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[0, 1])
             fig, ax = plt.subplots(figsize=(4, 4), dpi=120)
             disp.plot(ax=ax, values_format='d', colorbar=False)
@@ -147,15 +155,57 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
                     'support': report[classe]['support'],
                     'fold': fold,
                     'accuracy_geral': acc,
-                    # opcional: caminho dos artefatos
+                    # opcional: caminho dos artefatos do fold
                     'cm_csv': caminho_cm_csv if classe == '0' else '',
                     'cm_png': caminho_cm_png if classe == '0' else ''
                 })
 
+        # =========================
+        # MATRIZ DE CONFUSÃO MACRO
+        # =========================
+        y_true_all = np.concatenate(y_true_all_folds)
+        y_pred_all = np.concatenate(y_pred_all_folds)
+
+        cm_macro = confusion_matrix(y_true_all, y_pred_all, labels=[0, 1])  # soma/aggregado dos folds
+        cm_macro_norm = cm_macro.astype(float) / cm_macro.sum(axis=1, keepdims=True)  # normalizada por linha
+
+        # salvar CSVs macro
+        base_macro = f"{nome_grupo}__{modelo_nome}__MACRO"
+        caminho_cm_macro_csv = os.path.join(pasta_cm, f"{base_macro}.csv")
+        caminho_cm_macro_norm_csv = os.path.join(pasta_cm, f"{base_macro}__NORMALIZADA.csv")
+
+        pd.DataFrame(cm_macro, index=["true_0", "true_1"], columns=["pred_0", "pred_1"]).to_csv(caminho_cm_macro_csv, index=True)
+        pd.DataFrame(cm_macro_norm, index=["true_0", "true_1"], columns=["pred_0", "pred_1"]).to_csv(caminho_cm_macro_norm_csv, index=True)
+
+        # salvar figuras macro (absoluta e normalizada)
+        # absoluta
+        fig, ax = plt.subplots(figsize=(4, 4), dpi=120)
+        ConfusionMatrixDisplay(confusion_matrix=cm_macro, display_labels=[0, 1]).plot(ax=ax, values_format='d', colorbar=False)
+        ax.set_title(f"{nome_grupo} - {modelo_nome} - MACRO (absoluta)")
+        fig.tight_layout()
+        caminho_cm_macro_png = os.path.join(pasta_cm, f"{base_macro}.png")
+        fig.savefig(caminho_cm_macro_png)
+        plt.close(fig)
+
+        # normalizada por linha
+        fig, ax = plt.subplots(figsize=(4, 4), dpi=120)
+        ConfusionMatrixDisplay.from_predictions(
+            y_true_all, y_pred_all, display_labels=[0, 1],
+            normalize='true', values_format='.2f', ax=ax, colorbar=False
+        )
+        ax.set_title(f"{nome_grupo} - {modelo_nome} - MACRO (normalizada)")
+        fig.tight_layout()
+        caminho_cm_macro_norm_png = os.path.join(pasta_cm, f"{base_macro}__NORMALIZADA.png")
+        fig.savefig(caminho_cm_macro_norm_png)
+        plt.close(fig)
+
         print(f"Finalizado modelo {modelo_nome} para '{nome_grupo}'")
+        print(f"-> MACRO salva: {caminho_cm_macro_csv} | {caminho_cm_macro_png}")
+        print(f"-> MACRO NORMALIZADA salva: {caminho_cm_macro_norm_csv} | {caminho_cm_macro_norm_png}")
 
     print(f"\nAvaliação concluída para o grupo: {nome_grupo}")
     return pd.DataFrame(resultados)
+
 
 
 # Parte 7 - Executar o modelo e recuperar os resultados para cada DataFrame
