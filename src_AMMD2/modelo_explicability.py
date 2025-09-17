@@ -45,7 +45,7 @@ print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 # ======= Parte 8 - Criação das pastas de resultados (FEITO ANTES DA AVALIAÇÃO) =======
 
 agora = datetime.now().strftime('%d%m%Y_%H%M')
-pasta_saida = os.path.join("..", "resultadosAMMD2", "pre_explicabilidade", f"resultado_RF_XGB_PO_{agora}")
+pasta_saida = os.path.join("..", "resultadosAMMD2", "pre_explicabilidade", f"resultado_RF_XGB_P_{agora}")
 os.makedirs(pasta_saida, exist_ok=True)
 
 
@@ -83,7 +83,7 @@ def definir_modelos_sklearn(input_dim):
         rf = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
         xgb = XGBClassifier(n_estimators=100, max_depth=6, learning_rate=0.1, verbosity=1, use_label_encoder=False, random_state=42)
 
-    return {'RandomForest': rf, 'XGBoost': xgb}
+    return {'RandomForest': rf}#, 'XGBoost': xgb}
 
 
 # Parte 6 - Definir função de avaliação (agora salvando matriz de confusão por experimento)
@@ -220,7 +220,9 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
 # Parte 7 - Executar o modelo e recuperar os resultados para cada DataFrame
 
 df_resultados = pd.concat([
-    avaliar_modelos_em_dataframe(df_po, 'permissions_opcodes', pasta_saida),
+    avaliar_modelos_em_dataframe(df_p, 'permissions', pasta_saida),
+    #avaliar_modelos_em_dataframe(df_o, 'opcodes', pasta_saida),
+    #avaliar_modelos_em_dataframe(df_po, 'permissions_opcodes', pasta_saida),
 ], ignore_index=True)
 
 
