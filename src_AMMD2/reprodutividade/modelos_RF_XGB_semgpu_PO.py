@@ -27,7 +27,7 @@ from xgboost import XGBClassifier
 
 # Parte 2 - Abertura do arquivo, recuperação dos dados e embaralhamento
 
-CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_undersampling_duplicados_eliminados.npz")
+CAMINHO_ARQUIVO = os.path.join("..","..", "dados", "dados_undersampling_duplicados_eliminados.npz")
 
 # Carrega os dados com mmap_mode para uso mais leve de memória
 dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
@@ -46,20 +46,20 @@ y = y[idx_final]
 
 print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 
-# ======= Parte 8 - Criação das pastas de resultados (FEITO ANTES DA AVALIAÇÃO) =======
+# Parte 8 - Criação das pastas de resultados
 
 agora = datetime.now().strftime('%d%m%Y_%H%M')
-pasta_saida = os.path.join("..", "resultadosAMMD2", "amostras_reduzidas_balanceadas", f"resultado_RF_XGB_PO_{agora}")
+pasta_saida = os.path.join("..", "..", "resultadosAMMD2", "pre_explicabilidade", f"resultado_RF_XGB_PO_{agora}")
 os.makedirs(pasta_saida, exist_ok=True)
-
 
 # Parte 3 - Separar as colunas das features e criar os DataFrames
 
 # Identificar colunas por namespace
+# idx_intents = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
 idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
-idx_opcodes     = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
+idx_opcodes = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
 
-df_po    = pd.DataFrame(X[:, idx_permissions + idx_opcodes], columns=np.array(colunas)[idx_permissions + idx_opcodes])
+df_po = pd.DataFrame(X[:, idx_permissions + idx_opcodes], columns=np.array(colunas)[idx_permissions + idx_opcodes])
 df_po['classe'] = y
 
 print("DataFrames criados:")
@@ -211,7 +211,7 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
 # Parte 7 - Executar o modelo e recuperar os resultados para cada DataFrame
 
 df_resultados = pd.concat([
-    avaliar_modelos_em_dataframe(df_po, 'permissions_opcodes', pasta_saida),
+    avaliar_modelos_em_dataframe(df_po, 'permission_opcodes', pasta_saida),
 ], ignore_index=True)
 
 
