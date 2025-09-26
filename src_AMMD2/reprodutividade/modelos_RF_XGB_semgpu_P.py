@@ -24,49 +24,9 @@ from sklearn.ensemble import RandomForestClassifier
 
 from xgboost import XGBClassifier
 
+import joblib
 
-# Parte 2 - Abertura do arquivo, recuperação dos dados e embaralhamento
-
-CAMINHO_ARQUIVO = os.path.join("..","..", "dados", "dados_undersampling_duplicados_eliminados.npz")
-
-# Carrega os dados com mmap_mode para uso mais leve de memória
-dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
-
-# Extração dos arrays principais
-X = dados['data']
-y = dados['classes']
-colunas = dados['column_names']
-
-# Embaralhar X e y
-rng = np.random.default_rng(42)  # garante reprodutibilidade
-idx_final = rng.permutation(X.shape[0])  # embaralha os índices
-
-X = X[idx_final]
-y = y[idx_final]
-
-print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
-
-# Parte 8 - Criação das pastas de resultados
-
-agora = datetime.now().strftime('%d%m%Y_%H%M')
-pasta_saida = os.path.join("..", "..", "resultadosAMMD2", "pre_explicabilidade", f"resultado_RF_XGB_PO_{agora}")
-os.makedirs(pasta_saida, exist_ok=True)
-
-# Parte 3 - Separar as colunas das features e criar os DataFrames
-
-# Identificar colunas por namespace
-# idx_intents = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
-idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
-idx_opcodes = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
-
-df_po = pd.DataFrame(X[:, idx_permissions + idx_opcodes], columns=np.array(colunas)[idx_permissions + idx_opcodes])
-df_po['classe'] = y
-
-print("DataFrames criados:")
-print(f" - df_po : {df_po.shape}")
-
-
-# Parte 5 - Função para definir modelos adaptados
+# Função para definir modelos adaptados
 
 def definir_modelos_sklearn(input_dim):
     if input_dim > 20000:
@@ -82,7 +42,8 @@ def definir_modelos_sklearn(input_dim):
     return {'RandomForest': rf, 'XGBoost': xgb}
 
 
-# Parte 6 - Definir função de avaliação (agora salvando matriz de confusão por experimento)
+
+# Função de avaliação (agora salvando matriz de confusão por experimento)
 
 def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
 
@@ -115,6 +76,7 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
             y_train, y_test = y[train_idx], y[test_idx]
 
             modelo.fit(X_train, y_train)
+            joblib.dump(modelo, 'modelo_{modelo_nome_}_{nome_grupo}_{fold}.joblib')
             y_pred = modelo.predict(X_test).astype(int)
 
             # acumula para a matriz macro
@@ -208,10 +170,67 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
 
 
 
+# Parte 2 - Abertura do arquivo, recuperação dos dados e embaralhamento
+
+CAMINHO_ARQUIVO = os.path.join("..","..", "dados", "dados_undersampling_duplicados_eliminados.npz")
+
+# Carrega os dados com mmap_mode para uso mais leve de memória
+dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
+
+# Extração dos arrays principais
+X = dados['data']
+y = dados['classes']
+colunas = dados['column_names']
+
+# Embaralhar X e y
+rng = np.random.default_rng(42)  # garante reprodutibilidade
+idx_final = rng.permutation(X.shape[0])  # embaralha os índices
+
+X = X[idx_final]
+y = y[idx_final]
+
+print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
+
+# Parte 8 - Criação das pastas de resultados
+
+agora = datetime.now().strftime('%d%m%Y')
+pasta_saida = os.path.join("..", "..", "resultadosAMMD2", "pre_explicabilidade", f"resultado_RF_XGB_P_18092025")
+os.makedirs(pasta_saida, exist_ok=True)
+
+# Parte 3 - Separar as colunas das features e criar os DataFrames
+
+# Identificar colunas por namespace
+# idx_intents = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
+idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
+# idx_opcodes = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
+# idx_apicalls = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
+
+# df_i = pd.DataFrame(X[:, idx_intents], columns=np.array(colunas)[idx_intents])
+# df_i['classe'] = y
+
+df_p = pd.DataFrame(X[:, idx_permissions], columns=np.array(colunas)[idx_permissions])
+df_p['classe'] = y
+
+# df_o = pd.DataFrame(X[:, idx_opcodes], columns=np.array(colunas)[idx_opcodes])
+# df_o['classe'] = y
+
+# df_a = pd.DataFrame(X[:, idx_apicalls], columns=np.array(colunas)[idx_apicalls])
+# df_a['classe'] = y
+
+# df_po = pd.DataFrame(X[:, idx_permissions + idx_opcodes], columns=np.array(colunas)[idx_permissions + idx_opcodes])
+# df_po['classe'] = y
+
+# df_all = pd.DataFrame(X, columns=np.array(colunas))
+# df_all['classe'] = y
+
+print("DataFrames criados:")
+print(f" - df_po : {df_p.shape}")
+
+
 # Parte 7 - Executar o modelo e recuperar os resultados para cada DataFrame
 
 df_resultados = pd.concat([
-    avaliar_modelos_em_dataframe(df_po, 'permission_opcodes', pasta_saida),
+    avaliar_modelos_em_dataframe(df_p, 'permissions', pasta_saida),
 ], ignore_index=True)
 
 
