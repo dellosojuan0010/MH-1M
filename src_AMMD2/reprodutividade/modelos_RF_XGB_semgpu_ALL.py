@@ -1,3 +1,9 @@
+###
+#
+# ESSE MODELO SERIA PARA USAR TENSORFLOW, A GPU DO DESKTOP DO LAB SÓ RODOU COM PYTORCH
+#
+###
+
 # Parte 1 - Importação das bibliotecas
 
 import os
@@ -18,9 +24,10 @@ from sklearn.ensemble import RandomForestClassifier
 
 from xgboost import XGBClassifier
 
-# === DEFINIÇÃO DAS FUNÇÕES
+import joblib
 
-# Parte 2 - Função para definir modelos adaptados
+# Função para definir modelos adaptados
+
 def definir_modelos_sklearn(input_dim):
     if input_dim > 20000:
         rf = RandomForestClassifier(n_estimators=200, max_depth=20, random_state=42)
@@ -34,12 +41,14 @@ def definir_modelos_sklearn(input_dim):
 
     return {'RandomForest': rf, 'XGBoost': xgb}
 
-# Parte 3 - Definir função de avaliação e salva matriz de confusão por experimento)
+
+
+# Função de avaliação (agora salvando matriz de confusão por experimento)
+
 def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
 
-    # Definição do conjunto de dados a serem utilizados nesses modelos com o grupo em DF
     X = df.drop(columns=['classe']).values.astype(np.float32)
-    y = df['classe'].astype(np.int32).values
+    y = df['classe'].astype(np.int32).values  # garante inteiros 0/1
     input_dim = X.shape[1]
 
     print(f"\nIniciando avaliação para o grupo de features: '{nome_grupo}' com {X.shape[1]} atributos e {X.shape[0]} instâncias.")
@@ -48,15 +57,11 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
     pasta_cm = os.path.join(pasta_saida, "matrizes_confusao")
     os.makedirs(pasta_cm, exist_ok=True)
 
-    # Definição da estrutura para fatiamento dos k-folds
     skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
     print(f"\nDefinindo os modelos RandomForest e XGBoost.")
-
-    #Criação dos modelos para o grupo em DF
     modelos = definir_modelos_sklearn(input_dim)
-    
     resultados = []
-    # Percorre por todos os modelos
+
     for modelo_nome, modelo in tqdm(modelos.items(), desc=f"[{nome_grupo}] Modelos sklearn"):
 
         print(f"\nModelo: {modelo_nome} - Total de folds: {n_splits}")
@@ -70,23 +75,29 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
             X_train, X_test = X[train_idx], X[test_idx]
             y_train, y_test = y[train_idx], y[test_idx]
 
+            nome_base = f"{nome_grupo}__{modelo_nome}__fold{fold}"
+
             modelo.fit(X_train, y_train)
+            joblib.dump(modelo, os.path.join(pasta_saida,nome_base+'.joblib'))
             y_pred = modelo.predict(X_test).astype(int)
+
+            # acumula para a matriz macro
+            y_true_all_folds.append(y_test)
+            y_pred_all_folds.append(y_pred)
 
             acc = accuracy_score(y_test, y_pred)
             report = classification_report(y_test, y_pred, output_dict=True, zero_division=0)
             print(report)
 
-            # ===== MATRIZ DE CONFUSÃO desse fold =====
+            # ===== MATRIZ DE CONFUSÃO (2x2 com labels fixos) =====
             cm = confusion_matrix(y_test, y_pred, labels=[0, 1])
 
-            # Salvar CSV da matriz de confusão do experimento (fold)
-            nome_base = f"{nome_grupo}__{modelo_nome}__fold{fold}"
+            # Salvar CSV da matriz de confusão do experimento (fold)            
             caminho_cm_csv = os.path.join(pasta_cm, f"{nome_base}.csv")
             pd.DataFrame(cm, index=["true_0", "true_1"], columns=["pred_0", "pred_1"]).to_csv(caminho_cm_csv, index=True)
 
-            # Salvar figura da matriz de confusão do experimento        
-            disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['goodware', 'malware'])
+            # Salvar figura da matriz de confusão do experimento
+            disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['benigno', 'maligno'])
             fig, ax = plt.subplots(figsize=(4, 4), dpi=120)
             disp.plot(ax=ax, values_format='d', colorbar=False)
             ax.set_title(f"{nome_grupo} - {modelo_nome} - Fold {fold}")
@@ -112,10 +123,6 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
                     'cm_png': caminho_cm_png if classe == '0' else ''
                 })
 
-            # acumula para a matriz macro
-            y_true_all_folds.append(y_test)
-            y_pred_all_folds.append(y_pred)
-
         # =========================
         # MATRIZ DE CONFUSÃO MACRO
         # =========================
@@ -134,9 +141,14 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
         pd.DataFrame(cm_macro_norm, index=["true_0", "true_1"], columns=["pred_0", "pred_1"]).to_csv(caminho_cm_macro_norm_csv, index=True)
 
         # salvar figuras macro (absoluta e normalizada)
-        
         # absoluta
-        criar_figura_matriz_de_confusao(cm_macro, nome_grupo, modelo_nome, base_macro, pasta_cm)
+        fig, ax = plt.subplots(figsize=(4, 4), dpi=120)
+        ConfusionMatrixDisplay(confusion_matrix=cm_macro, display_labels=[0, 1]).plot(ax=ax, values_format='d', colorbar=False)
+        ax.set_title(f"{nome_grupo} - {modelo_nome} - MACRO (absoluta)")
+        fig.tight_layout()
+        caminho_cm_macro_png = os.path.join(pasta_cm, f"{base_macro}.png")
+        fig.savefig(caminho_cm_macro_png)
+        plt.close(fig)
 
         # normalizada por linha
         fig, ax = plt.subplots(figsize=(4, 4), dpi=120)
@@ -158,17 +170,10 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
     return pd.DataFrame(resultados)
 
 
-def criar_figura_matriz_de_confusao(cm_macro, nome_grupo, modelo_nome, base_macro, pasta_cm):
-    fig, ax = plt.subplots(figsize=(4, 4), dpi=120)
-    ConfusionMatrixDisplay(confusion_matrix=cm_macro, display_labels=[0, 1]).plot(ax=ax, values_format='d', colorbar=False)
-    ax.set_title(f"{nome_grupo} - {modelo_nome} - MACRO (absoluta)")
-    fig.tight_layout()
-    caminho_cm_macro_png = os.path.join(pasta_cm, f"{base_macro}.png")
-    fig.savefig(caminho_cm_macro_png)
-    plt.close(fig)
 
-# Parte 4 - Abertura do arquivo, recuperação dos dados e embaralhamento
-CAMINHO_ARQUIVO = os.path.join("..", "dados", "dados_undersampling_duplicados_eliminados.npz")
+# Parte 2 - Abertura do arquivo, recuperação dos dados e embaralhamento
+
+CAMINHO_ARQUIVO = os.path.join("..","..", "dados", "dados_undersampling_duplicados_eliminados.npz")
 
 # Carrega os dados com mmap_mode para uso mais leve de memória
 dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True, mmap_mode='r')
@@ -187,34 +192,48 @@ y = y[idx_final]
 
 print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 
-# Parte 5 - Separar as colunas das features e criar os DataFrames
+# Parte 8 - Criação das pastas de resultados
 
-# Identificar colunas por namespace
-idx_intents = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
-idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
-idx_opcodes     = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
-
-grupos = {'intents': idx_intents, 'permissions': idx_permissions, 'opcodes': idx_opcodes, 'permission_opcodes': idx_permissions+idx_opcodes}
-
-# Parte 5 - Criação das pastas de resultados
-agora = datetime.now().strftime('%d%m%Y_%H%M')
-pasta_saida = os.path.join("..","..", "resultadosAMMD2", "amostras_reduzidas_balanceadas", f"resultado_RF_XGB_I_P_O_PO{agora}")
+agora = datetime.now().strftime('%d%m%Y')
+pasta_saida = os.path.join("..", "..", "resultadosAMMD2", "pre_explicabilidade", f"resultado_RF_XGB_ALL_18092025")
 os.makedirs(pasta_saida, exist_ok=True)
 
-resultados_lista = []
+# Parte 3 - Separar as colunas das features e criar os DataFrames
 
-for nome_grupo, idxs in grupos.items():
-    df = pd.DataFrame(X[:,idxs], columns=np.array(colunas)[idxs])
-    df['classe'] = y
-    print(f"DataFrame {nome_grupo}({df.shape}) criado!")
+# Identificar colunas por namespace
+# idx_intents = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
+# idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
+# idx_opcodes = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
+# idx_apicalls = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
 
-    resultados_lista.append(avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida,5))
-    del df
-    gc.collect()
+# df_i = pd.DataFrame(X[:, idx_intents], columns=np.array(colunas)[idx_intents])
+# df_i['classe'] = y
+
+# df_p = pd.DataFrame(X[:, idx_permissions], columns=np.array(colunas)[idx_permissions])
+# df_p['classe'] = y
+
+# df_o = pd.DataFrame(X[:, idx_opcodes], columns=np.array(colunas)[idx_opcodes])
+# df_o['classe'] = y
+
+# df_a = pd.DataFrame(X[:, idx_apicalls], columns=np.array(colunas)[idx_apicalls])
+# df_a['classe'] = y
+
+# df_po = pd.DataFrame(X[:, idx_permissions + idx_opcodes], columns=np.array(colunas)[idx_permissions + idx_opcodes])
+# df_po['classe'] = y
+
+df_all = pd.DataFrame(X, columns=np.array(colunas))
+df_all['classe'] = y
+
+print("DataFrames criados:")
+print(f" - df_all : {df_all.shape}")
+
+
+# Parte 7 - Executar o modelo e recuperar os resultados para cada DataFrame
 
 df_resultados = pd.concat([
-    avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida,5)
+    avaliar_modelos_em_dataframe(df_all, 'all', pasta_saida),
 ], ignore_index=True)
+
 
 # Parte 8.2 - Exportar os dados consolidados
 caminho_saida = os.path.join(pasta_saida, 'resultados_modelos.csv')

@@ -195,14 +195,14 @@ print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 # Parte 8 - Criação das pastas de resultados
 
 agora = datetime.now().strftime('%d%m%Y')
-pasta_saida = os.path.join("..", "..", "resultadosAMMD2", "pre_explicabilidade", f"resultado_RF_XGB_PO_18092025")
+pasta_saida = os.path.join("..", "..", "resultadosAMMD2", "pre_explicabilidade", f"resultado_RF_XGB_O_18092025")
 os.makedirs(pasta_saida, exist_ok=True)
 
 # Parte 3 - Separar as colunas das features e criar os DataFrames
 
 # Identificar colunas por namespace
 # idx_intents = [i for i, nome in enumerate(colunas) if nome.startswith("intents::")]
-idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
+# idx_permissions = [i for i, nome in enumerate(colunas) if nome.startswith("permissions::")]
 idx_opcodes = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::")]
 # idx_apicalls = [i for i, nome in enumerate(colunas) if nome.startswith("apicalls::")]
 
@@ -212,26 +212,26 @@ idx_opcodes = [i for i, nome in enumerate(colunas) if nome.startswith("opcodes::
 # df_p = pd.DataFrame(X[:, idx_permissions], columns=np.array(colunas)[idx_permissions])
 # df_p['classe'] = y
 
-# df_o = pd.DataFrame(X[:, idx_opcodes], columns=np.array(colunas)[idx_opcodes])
-# df_o['classe'] = y
+df_o = pd.DataFrame(X[:, idx_opcodes], columns=np.array(colunas)[idx_opcodes])
+df_o['classe'] = y
 
 # df_a = pd.DataFrame(X[:, idx_apicalls], columns=np.array(colunas)[idx_apicalls])
 # df_a['classe'] = y
 
-df_po = pd.DataFrame(X[:, idx_permissions + idx_opcodes], columns=np.array(colunas)[idx_permissions + idx_opcodes])
-df_po['classe'] = y
+# df_po = pd.DataFrame(X[:, idx_permissions + idx_opcodes], columns=np.array(colunas)[idx_permissions + idx_opcodes])
+# df_po['classe'] = y
 
 # df_all = pd.DataFrame(X, columns=np.array(colunas))
 # df_all['classe'] = y
 
 print("DataFrames criados:")
-print(f" - df_po : {df_po.shape}")
+print(f" - df_o : {df_o.shape}")
 
 
 # Parte 7 - Executar o modelo e recuperar os resultados para cada DataFrame
 
 df_resultados = pd.concat([
-    avaliar_modelos_em_dataframe(df_po, 'permissions_opcodes', pasta_saida),
+    avaliar_modelos_em_dataframe(df_o, 'opcodes', pasta_saida),
 ], ignore_index=True)
 
 

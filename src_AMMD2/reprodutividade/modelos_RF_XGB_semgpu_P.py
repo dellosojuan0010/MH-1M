@@ -75,8 +75,10 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
             X_train, X_test = X[train_idx], X[test_idx]
             y_train, y_test = y[train_idx], y[test_idx]
 
+            nome_base = f"{nome_grupo}__{modelo_nome}__fold{fold}"
+
             modelo.fit(X_train, y_train)
-            joblib.dump(modelo, 'modelo_{modelo_nome_}_{nome_grupo}_{fold}.joblib')
+            joblib.dump(modelo, os.path.join(pasta_saida,nome_base+'.joblib'))
             y_pred = modelo.predict(X_test).astype(int)
 
             # acumula para a matriz macro
@@ -90,8 +92,7 @@ def avaliar_modelos_em_dataframe(df, nome_grupo, pasta_saida, n_splits=5):
             # ===== MATRIZ DE CONFUSÃO (2x2 com labels fixos) =====
             cm = confusion_matrix(y_test, y_pred, labels=[0, 1])
 
-            # Salvar CSV da matriz de confusão do experimento (fold)
-            nome_base = f"{nome_grupo}__{modelo_nome}__fold{fold}"
+            # Salvar CSV da matriz de confusão do experimento (fold)            
             caminho_cm_csv = os.path.join(pasta_cm, f"{nome_base}.csv")
             pd.DataFrame(cm, index=["true_0", "true_1"], columns=["pred_0", "pred_1"]).to_csv(caminho_cm_csv, index=True)
 
