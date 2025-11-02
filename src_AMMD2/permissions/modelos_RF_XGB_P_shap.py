@@ -6,6 +6,13 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
+import tensorflow as tf
+from tensorflow.keras import layers, models, optimizers, losses
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, LeakyReLU
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
+
 import matplotlib.pyplot as plt
 
 from tqdm import tqdm
@@ -58,10 +65,7 @@ def treina_modelo(df, modelo, nome_modelo, nome_grupo, n_splits=5, pasta_saida="
   
     resultados = []
 
-    idx_fold = 1
     for fold, (train_idx, test_idx) in enumerate(skf.split(X, y), start=1):
-        if fold != idx_fold:
-            continue
         print(f" # Treinando {nome_modelo} - Fold {fold}")
         X_train, X_test = X[train_idx], X[test_idx]
         y_train, y_test = y[train_idx], y[test_idx]
@@ -97,7 +101,7 @@ def treina_modelo(df, modelo, nome_modelo, nome_grupo, n_splits=5, pasta_saida="
         for classe in ['0', '1']:
             resultados.append({
                 'grupo_de_features': nome_grupo,
-                'modelo': modelo_nome,
+                'modelo': nome_modelo,
                 'classe': classe,
                 'precision': report[classe]['precision'],
                 'recall': report[classe]['recall'],
@@ -142,7 +146,8 @@ def seleciona_dados(X, y, colunas, namespace_feature):
 
 def carrega_modelo(namespace_feature, nome_modelo, fold):
     # Abrir modelo salvo
-    modelo_carregado = joblib.load(f"{namespace_feature}__{nome_modelo}__fold{fold}.joblib")
+    # modelo_carregado = joblib.load(f"{namespace_feature}__{nome_modelo}__fold{fold}.joblib")
+    modelo_carregado = tf.keras.models.load_model('modelo_mlp_p_1.keras')
     # nome_modelo_carregado = inferir_nome_modelo(modelo_carregado)
     # print(f"Modelo carregado: {nome_modelo_carregado} ({ARQ_MODELO})")    
     return modelo_carregado
@@ -171,21 +176,21 @@ def main():
     modelo = carrega_modelo(namespace_feature, nome_modelo, fold)
 
     # X e df já preparados; modelo (RF/XGB) já carregado
-    X_ns = df.drop(columns='classe').values
-    y_ns = df['classe'].values
+    X_ns = df.drop(columns=['classe']).values.astype(np.float32)
+    y_ns = df['classe'].astype(np.int32).values  # garante inteiros 0/1
     
     # Divisão treino/teste (mantendo features certas)
     X_train, X_test, y_train, y_test = train_test_split(
         X_ns,
         y_ns,
-        test_size=0.3,
+        test_size=0.02,
         random_state=42
     )
 
-    explainer = shap.Explainer(modelo, X_train)
+    explainer = shap.Explainer(modelo, X_train, model_output="probability", feature_names=df.columns[:-1].tolist())
 
     # SHAP de todas as amostras de uma vez
-    shap_values = explainer.shap_values(X_test)
+    shap_values = explainer(X_test)
 
     print(f"Shape values: {shap_values.values.shape}")
     print(f"Base values: {shap_values.base_values.shape}")
@@ -200,11 +205,8 @@ def main():
         data = shap_values.data,
         feature_names = shap_values.feature_names,
         output_names = shap_values.output_names
-    )   
-
-
+    )
 
 # Ponto de entrada
 if __name__ == "__main__":
     main()
-
