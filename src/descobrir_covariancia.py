@@ -11,7 +11,7 @@ import tqdm
 import csv
 
 # Caminho para o arquivo compactado
-CAMINHO_ARQUIVO = '../dados/amex-1M-[intents-permissions-opcodes-apicalls].npz'
+CAMINHO_ARQUIVO = '../dados/amostras_reduzidas.npz'
 
 # Carrega os dados com mmap_mode para uso mais leve de memória
 dados = np.load(CAMINHO_ARQUIVO, allow_pickle=True)
@@ -31,13 +31,12 @@ nome_grupo = "apicalls"
 idx_features = [i for i, nome in enumerate(colunas) if nome.startswith(f"{nome_grupo}::")]
 print(len(idx_features))
 
-
-caminho = os.path.join('.', 'idx_features.csv')
-print(caminho)
-with open(caminho, 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile)
-    for s in idx_features:
-        writer.writerow([s]) 
+# caminho = os.path.join('.', 'idx_features.csv')
+# print(caminho)
+# with open(caminho, 'w', newline='') as csvfile:
+#     writer = csv.writer(csvfile)
+#     for s in idx_features:
+#         writer.writerow([s]) 
 
 X = X[:,idx_features]
 colunas = colunas[idx_features]
@@ -56,7 +55,7 @@ n_cols = X.shape[1]
 # Usamos tqdm para acompanhar o progresso, o que será lento
 agora = datetime.now().strftime('%d%m%Y_%H%M')
 print(agora)
-for i in range(n_cols):
+for i in tqdm(range(n_cols)):
     agora = datetime.now().strftime('%d%m%Y_%H%M')
     print(agora, end=' - ')
     for j in range(i + 1, n_cols):
