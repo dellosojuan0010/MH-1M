@@ -68,22 +68,22 @@ def cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5):
         )
 
 
-modelo_nome = "XGBoost"
-nome_grupo = "permissions"
+modelo_nome = "RandomForest"
+nome_grupo = "apicalls"
 # Parte 2 - Abertura do arquivo, recuperação dos dados e embaralhamento
 CAMINHO_ARQUIVO = os.path.join("..","..", "dados", "dados_undersampling_duplicados_eliminados.npz")
 
 # Caminho para o arquivo compactado
 
-PASTA_MODELO = "."
+PASTA_MODELO = os.path.join(".","modelos")
 
-PASTA_DADOS_SHAP = "."
+PASTA_DADOS_SHAP = os.path.join(".","SHAP")
 
-PASTA_SAIDA = "."
+PASTA_SAIDA = os.path.join(".","SHAP")
 
 # cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5)
 
-n_folds = 5
+n_folds = 1
 for i in range(n_folds):
     fold = i+1
     caminho_arquivo_shap = os.path.join(PASTA_DADOS_SHAP,f"{nome_grupo}__{modelo_nome}__fold{fold}_SHAP.npz")
@@ -107,12 +107,12 @@ for i in range(n_folds):
     print()
     print(shap_values_feature_names[0:5])
 
-    # # (n_amostras, n_features, n_classes)
-    # vals = shap_values_values[:, :, 1]  # pega a classe 1
-    # # vals = np.mean(np.abs(vals), axis=2)  # agrega sobre classes
+    # (n_amostras, n_features, n_classes)
+    vals = shap_values_values[:, :, 1]  # pega a classe 1
+    # vals = np.mean(np.abs(vals), axis=2)  # agrega sobre classes
 
     # Importância global = média do valor absoluto por feature nas amostras
-    importancias = np.abs(shap_values_values).mean(axis=0)  # (n_features,)
+    importancias = np.abs(vals).mean(axis=0)  # (n_features,)
 
     # Transforma em Series (liga valores aos nomes das features)
     importances = pd.Series(importancias, index=shap_values_feature_names.tolist())

@@ -69,7 +69,7 @@ def cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5):
 
 
 modelo_nome = "RandomForest"
-nome_grupo = "permissions"
+nome_grupo = "permissions_opcodes"
 # Parte 2 - Abertura do arquivo, recuperação dos dados e embaralhamento
 CAMINHO_ARQUIVO = os.path.join("..","..", "dados", "dados_undersampling_duplicados_eliminados.npz")
 

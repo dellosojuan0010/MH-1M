@@ -36,14 +36,15 @@ def cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5):
     folds = list(skf.split(X, y))
 
     # for fold in range(n_splits):
-    fold = 1
+    i = 1
+    fold = i+1
     train_idx, test_idx = folds[fold]
     X_train, X_test = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
     
-    modelo = joblib.load(f'{nome_grupo}__{modelo_nome}__fold{fold+1}.joblib')
+    modelo = joblib.load(f'{nome_grupo}__{modelo_nome}__fold{fold}.joblib')
 
-    print(f"Criando SHAP para o modelo {modelo_nome} - Fold {fold+1}")    
+    print(f"Criando SHAP para o modelo {modelo_nome} - Fold {fold}")    
     explainer = shap.TreeExplainer(modelo, data=X_train, model_output='probability')
 
     shap_values = explainer(X_test)
@@ -55,7 +56,7 @@ def cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5):
     X_explicado = shap_exp.data.astype(np.float32)            # (n, d)
 
     # salva tudo em um único arquivo compacto
-    saida_npz = f'{nome_grupo}__{modelo_nome}__fold{fold+1}_SHAP.npz'
+    saida_npz = f'{nome_grupo}__{modelo_nome}__fold{fold}_SHAP.npz'
 
     np.savez_compressed(
         saida_npz,

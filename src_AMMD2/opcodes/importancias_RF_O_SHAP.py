@@ -77,9 +77,9 @@ CAMINHO_ARQUIVO = os.path.join("..","..", "dados", "dados_undersampling_duplicad
 
 PASTA_MODELO = "."
 
-PASTA_DADOS_SHAP = "."
+PASTA_DADOS_SHAP = os.path.join(".","SHAP")
 
-PASTA_SAIDA = "."
+PASTA_SAIDA = os.path.join(".","SHAP")
 
 # cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5)
 

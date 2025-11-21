@@ -68,8 +68,8 @@ def cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5):
         )
 
 
-modelo_nome = "RandomForest"
-nome_grupo = "permissions"
+modelo_nome = "XGBoost"
+nome_grupo = "permissions_opcodes"
 # Parte 2 - Abertura do arquivo, recuperação dos dados e embaralhamento
 CAMINHO_ARQUIVO = os.path.join("..","..", "dados", "dados_undersampling_duplicados_eliminados.npz")
 
@@ -107,12 +107,12 @@ for i in range(n_folds):
     print()
     print(shap_values_feature_names[0:5])
 
-    # (n_amostras, n_features, n_classes)
-    vals = shap_values_values[:, :, 1]  # pega a classe 1
-    # vals = np.mean(np.abs(vals), axis=2)  # agrega sobre classes
+    # # (n_amostras, n_features, n_classes)
+    # vals = shap_values_values[:, :, 1]  # pega a classe 1
+    # # vals = np.mean(np.abs(vals), axis=2)  # agrega sobre classes
 
     # Importância global = média do valor absoluto por feature nas amostras
-    importancias = np.abs(vals).mean(axis=0)  # (n_features,)
+    importancias = np.abs(shap_values_values).mean(axis=0)  # (n_features,)
 
     # Transforma em Series (liga valores aos nomes das features)
     importances = pd.Series(importancias, index=shap_values_feature_names.tolist())

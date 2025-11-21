@@ -69,21 +69,21 @@ def cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5):
 
 
 modelo_nome = "XGBoost"
-nome_grupo = "permissions"
+nome_grupo = "apicalls"
 # Parte 2 - Abertura do arquivo, recuperação dos dados e embaralhamento
 CAMINHO_ARQUIVO = os.path.join("..","..", "dados", "dados_undersampling_duplicados_eliminados.npz")
 
 # Caminho para o arquivo compactado
 
-PASTA_MODELO = "."
+PASTA_MODELO = os.path.join(".","modelos")
 
-PASTA_DADOS_SHAP = "."
+PASTA_DADOS_SHAP = os.path.join(".","SHAP")
 
-PASTA_SAIDA = "."
+PASTA_SAIDA = os.path.join(".","SHAP")
 
 # cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5)
 
-n_folds = 5
+n_folds = 1
 for i in range(n_folds):
     fold = i+1
     caminho_arquivo_shap = os.path.join(PASTA_DADOS_SHAP,f"{nome_grupo}__{modelo_nome}__fold{fold}_SHAP.npz")
