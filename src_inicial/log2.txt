@@ -1,0 +1,32 @@
+Dados embaralhados: X=(159020, 23239), y=(159020,)
+DataFrames criados:
+ - df : (159020, 23240)
+
+Iniciando avaliação para o grupo de features: 'todas' com 23239 atributos e 159020 instâncias.
+
+Definindo os modelos RandomForest e XGBoost.
+
+Modelo: XGBoost - Total de folds: 5
+Treinando XGBoost - Fold 1
+{'0': {'precision': 0.958666750677336, 'recall': 0.9567978870582317, 'f1-score': 0.9577314071696095, 'support': 15902.0}, '1': {'precision': 0.9568819431368857, 'recall': 0.9587473273802037, 'f1-score': 0.9578137270299985, 'support': 15902.0}, 'accuracy': 0.9577726072192178, 'macro avg': {'precision': 0.9577743469071108, 'recall': 0.9577726072192176, 'f1-score': 0.957772567099804, 'support': 31804.0}, 'weighted avg': {'precision': 0.9577743469071108, 'recall': 0.9577726072192178, 'f1-score': 0.957772567099804, 'support': 31804.0}}
+Treinando XGBoost - Fold 2
+{'0': {'precision': 0.9588405069644874, 'recall': 0.9610111935605584, 'f1-score': 0.9599246231155779, 'support': 15902.0}, '1': {'precision': 0.9609227278457078, 'recall': 0.9587473273802037, 'f1-score': 0.9598337950138505, 'support': 15902.0}, 'accuracy': 0.9598792604703811, 'macro avg': {'precision': 0.9598816174050976, 'recall': 0.9598792604703811, 'f1-score': 0.9598792090647141, 'support': 31804.0}, 'weighted avg': {'precision': 0.9598816174050976, 'recall': 0.9598792604703811, 'f1-score': 0.9598792090647142, 'support': 31804.0}}
+Treinando XGBoost - Fold 3
+{'0': {'precision': 0.9573358466855169, 'recall': 0.9581184756634386, 'f1-score': 0.9577270012886193, 'support': 15902.0}, '1': {'precision': 0.9580842092013343, 'recall': 0.9573009684316438, 'f1-score': 0.9576924286747822, 'support': 15902.0}, 'accuracy': 0.9577097220475412, 'macro avg': {'precision': 0.9577100279434256, 'recall': 0.9577097220475412, 'f1-score': 0.9577097149817008, 'support': 31804.0}, 'weighted avg': {'precision': 0.9577100279434255, 'recall': 0.9577097220475412, 'f1-score': 0.9577097149817008, 'support': 31804.0}}
+Treinando XGBoost - Fold 4
+{'0': {'precision': 0.959929546455306, 'recall': 0.959627719783675, 'f1-score': 0.9597786093902324, 'support': 15902.0}, '1': {'precision': 0.9596404098824417, 'recall': 0.9599421456420576, 'f1-score': 0.9597912540475966, 'support': 15902.0}, 'accuracy': 0.9597849327128664, 'macro avg': {'precision': 0.9597849781688739, 'recall': 0.9597849327128662, 'f1-score': 0.9597849317189144, 'support': 31804.0}, 'weighted avg': {'precision': 0.9597849781688739, 'recall': 0.9597849327128664, 'f1-score': 0.9597849317189145, 'support': 31804.0}}
+Treinando XGBoost - Fold 5
+{'0': {'precision': 0.9582732007278659, 'recall': 0.9603823418437932, 'f1-score': 0.9593266120167091, 'support': 15902.0}, '1': {'precision': 0.9602949517867272, 'recall': 0.9581813608351151, 'f1-score': 0.9592369920362618, 'support': 15902.0}, 'accuracy': 0.9592818513394542, 'macro avg': {'precision': 0.9592840762572965, 'recall': 0.9592818513394541, 'f1-score': 0.9592818020264855, 'support': 31804.0}, 'weighted avg': {'precision': 0.9592840762572966, 'recall': 0.9592818513394542, 'f1-score': 0.9592818020264855, 'support': 31804.0}}
+Finalizado modelo XGBoost para 'todas'
+-> MACRO salva: ./todas/XGBoost/resultados/matrizes_confusao/todas__XGBoost__MACRO.csv | ./todas/XGBoost/resultados/matrizes_confusao/todas__XGBoost__MACRO.png
+-> MACRO NORMALIZADA salva: ./todas/XGBoost/resultados/matrizes_confusao/todas__XGBoost__MACRO__NORMALIZADA.csv | ./todas/XGBoost/resultados/matrizes_confusao/todas__XGBoost__MACRO__NORMALIZADA.png
+
+Avaliação concluída para o grupo: todas
+                                  precision  recall  f1_score
+grupo_de_features modelo  classe                             
+todas             XGBoost 0          0.9586  0.9592    0.9589
+                          1          0.9592  0.9586    0.9589
+
+Arquivos salvos em: ./todas/XGBoost/resultados
+• CSV por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+• PNG por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
