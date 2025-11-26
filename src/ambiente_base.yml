@@ -1,4 +1,4 @@
-name: base
+name: envMH1MClone_ETSS
 channels:
   - defaults
   - https://repo.anaconda.com/pkgs/main
@@ -521,4 +521,4 @@ dependencies:
       - kmodes==0.12.2
       - shap==0.49.1
       - slicer==0.0.8
-prefix: /home/juan/anaconda3
+

@@ -91,9 +91,9 @@ y = y[idx_final]
 print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 
 # modelos = ["RandomForest", "XGBoost"]
-modelos = ["RandomForest"]
-# grupos = ["intents", "permissions", "opcodes", "apicalls"]
-grupos = ["opcodes", "apicalls"]
+modelos = ["XGBoost"]
+grupos = ["intents", "permissions", "opcodes", "apicalls"]
+# grupos = ["opcodes", "apicalls"]
 
 for modelo_nome in modelos:
     for nome_grupo in grupos:
