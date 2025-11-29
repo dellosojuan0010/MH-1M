@@ -1,0 +1,17 @@
+Dados embaralhados: X=(159020, 23239), y=(159020,)
+DataFrames criados:
+ - df : (159020, 22387)
+
+Iniciando avaliação para o grupo de features: 'apicalls' com 22386 atributos e 159020 instâncias.
+
+Modelo: RandomForest - Total de folds: 5
+Criando SHAP para o modelo RandomForest - Fold 4
+Criando SHAP para o modelo RandomForest - Fold 5
+DataFrames criados:
+ - df : (159020, 22387)
+
+Iniciando avaliação para o grupo de features: 'apicalls' com 22386 atributos e 159020 instâncias.
+
+Modelo: XGBoost - Total de folds: 5
+Criando SHAP para o modelo XGBoost - Fold 4
+Criando SHAP para o modelo XGBoost - Fold 5
