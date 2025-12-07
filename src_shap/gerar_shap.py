@@ -36,6 +36,8 @@ def cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5):
     folds = list(skf.split(X, y))
 
     for fold in range(n_splits):
+        if fold != 2:
+            continue
         train_idx, test_idx = folds[fold]
         X_train, X_test = X[train_idx], X[test_idx]
         y_train, y_test = y[train_idx], y[test_idx]
@@ -92,8 +94,8 @@ print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 
 # modelos = ["RandomForest", "XGBoost"]
 modelos = ["XGBoost"]
-# grupos = ["intents", "permissions", "opcodes", "apicalls"]
-grupos = ["permissions_opcodes", "todas"]
+grupos = ["intents", "permissions", "opcodes", "apicalls"]
+# grupos = ["opcodes", "apicalls"]
 
 for modelo_nome in modelos:
     for nome_grupo in grupos:
