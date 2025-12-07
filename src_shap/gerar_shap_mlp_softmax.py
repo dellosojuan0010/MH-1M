@@ -3,11 +3,20 @@
 import os
 import gc
 from datetime import datetime
+from math import trunc
+
 
 import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
+
+import tensorflow as tf
+from tensorflow.keras import layers, models, optimizers, losses
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, LeakyReLU
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
 
 import shap
 from tqdm import tqdm
@@ -22,7 +31,7 @@ from xgboost import XGBClassifier
 import joblib
 
 # Função de avaliação de valores SHAP
-def cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5):
+def cria_valores_shap(df, modelo_nome, nome_grupo, threshold, n_splits=5):
 
     X = df.drop(columns=['classe']).values.astype(np.float32)
     y = df['classe'].astype(np.int32).values  # garante inteiros 0/1
@@ -39,12 +48,15 @@ def cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5):
         train_idx, test_idx = folds[fold]
         X_train, X_test = X[train_idx], X[test_idx]
         y_train, y_test = y[train_idx], y[test_idx]
-        CAMINHO_PASTA_MODELO = f'../src_inicial/{nome_grupo}/{modelo_nome}/resultados/'
-        CAMINHO_MODELO = os.path.join(CAMINHO_PASTA_MODELO,f'{nome_grupo}__{modelo_nome}__fold{fold+1}.joblib')
-        modelo = joblib.load(CAMINHO_MODELO)
+        CAMINHO_PASTA_MODELO = f'../src_inicial/softmax/{nome_grupo}/{modelo_nome}_limiar{trunc(threshold*10)}/resultados/'
+        CAMINHO_MODELO = os.path.join(CAMINHO_PASTA_MODELO,f'{nome_grupo}__{modelo_nome}__fold{fold+1}.keras')
+        # caminho_modelo = os.path.join(pasta_entrada_modelo, f"modelo_mlp_{nome_grupo}_{fold+1}.keras")
+        modelo = tf.keras.models.load_model(CAMINHO_MODELO)
 
-        print(f"Criando SHAP para o modelo {modelo_nome} - Fold {fold+1}")    
-        explainer = shap.TreeExplainer(modelo, data=X_train, model_output='probability')
+        print(f"Criando SHAP para o modelo {modelo_nome} - Fold {fold+1}")  
+        # masker = shap.maskers.Independent(X_train)  # 50–200 costuma ser ok
+        # explainer = shap.Explainer(modelo, masker) 
+        explainer = shap.Explainer(modelo, X_train)
 
         shap_values = explainer(X_test)
 
@@ -55,7 +67,7 @@ def cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5):
         X_explicado = shap_exp.data.astype(np.float32)            # (n, d)
 
         # salva tudo em um único arquivo compacto
-        CAMINHO_SAIDA = f'./{nome_grupo}/{modelo_nome}/'
+        CAMINHO_SAIDA = f'./softmax/{nome_grupo}/{modelo_nome}_limiar{trunc(threshold*10)}/'
         os.makedirs(CAMINHO_SAIDA, exist_ok=True)
         saida_npz = os.path.join(CAMINHO_SAIDA,f'{nome_grupo}__{modelo_nome}__fold{fold+1}_SHAP.npz')
         
@@ -91,9 +103,10 @@ y = y[idx_final]
 print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 
 # modelos = ["RandomForest", "XGBoost"]
-modelos = ["XGBoost"]
-# grupos = ["intents", "permissions", "opcodes", "apicalls"]
-grupos = ["permissions_opcodes", "todas"]
+modelos = ["mlp"]
+grupos = ["intents", "opcodes"]
+# grupos = ["opcodes", "apicalls"]
+# grupos = ["permissions"]
 
 for modelo_nome in modelos:
     for nome_grupo in grupos:
@@ -109,7 +122,7 @@ for modelo_nome in modelos:
         print("DataFrames criados:")
         print(f" - df : {df.shape}")
 
-        cria_valores_shap(df, modelo_nome, nome_grupo, n_splits=5)
+        cria_valores_shap(df, modelo_nome, nome_grupo, threshold=0.8, n_splits=5)
         del df
         gc.collect()
 
