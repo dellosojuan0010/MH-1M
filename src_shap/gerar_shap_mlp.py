@@ -1,4 +1,4 @@
-from google.colab import drive
+
 
 import os
 import gc
@@ -129,7 +129,7 @@ for modelo_nome in modelos:
         print("DataFrames criados:")
         print(f" - df : {df.shape}")
 
-        cria_valores_shap(df, modelo_nome, nome_grupo, threshold=threshold, n_splits=5)
+        # cria_valores_shap(df, modelo_nome, nome_grupo, threshold=threshold, n_splits=5)
         del df
         gc.collect()
 
