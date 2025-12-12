@@ -1,0 +1,191 @@
+Intents:  332
+Permissions 191
+Opcodes 228
+Apicalls 17721
+Dados embaralhados: X=(159020, 23239), y=(159020,)
+DataFrames criados:
+ - df : (159020, 333)
+
+Iniciando avaliação para o grupo de features: 'intents' com 332 atributos e 159020 instâncias.
+
+Definindo os modelos RandomForest e XGBoost.
+
+Modelo: RandomForest - Total de folds: 5
+Treinando RandomForest - Fold 1
+{'0': {'precision': 0.6973792969319784, 'recall': 0.9019620173563074, 'f1-score': 0.7865858674490663, 'support': 15902.0}, '1': {'precision': 0.8612619026430542, 'recall': 0.6086026914853477, 'f1-score': 0.7132171413832492, 'support': 15902.0}, 'accuracy': 0.7552823544208276, 'macro avg': {'precision': 0.7793205997875163, 'recall': 0.7552823544208276, 'f1-score': 0.7499015044161578, 'support': 31804.0}, 'weighted avg': {'precision': 0.7793205997875162, 'recall': 0.7552823544208276, 'f1-score': 0.7499015044161579, 'support': 31804.0}}
+Treinando RandomForest - Fold 2
+{'0': {'precision': 0.7013005850215153, 'recall': 0.9121494151679034, 'f1-score': 0.7929479294792948, 'support': 15902.0}, '1': {'precision': 0.874381800197824, 'recall': 0.6114954093824676, 'f1-score': 0.7196832328016874, 'support': 15902.0}, 'accuracy': 0.7618224122751855, 'macro avg': {'precision': 0.7878411926096696, 'recall': 0.7618224122751855, 'f1-score': 0.7563155811404911, 'support': 31804.0}, 'weighted avg': {'precision': 0.7878411926096697, 'recall': 0.7618224122751855, 'f1-score': 0.7563155811404911, 'support': 31804.0}}
+Treinando RandomForest - Fold 3
+{'0': {'precision': 0.7001313293448125, 'recall': 0.9051691611118098, 'f1-score': 0.78955596390664, 'support': 15902.0}, '1': {'precision': 0.8658959537572254, 'recall': 0.6123129166142623, 'f1-score': 0.717353667071868, 'support': 15902.0}, 'accuracy': 0.7587410388630361, 'macro avg': {'precision': 0.7830136415510189, 'recall': 0.758741038863036, 'f1-score': 0.753454815489254, 'support': 31804.0}, 'weighted avg': {'precision': 0.7830136415510189, 'recall': 0.7587410388630361, 'f1-score': 0.753454815489254, 'support': 31804.0}}
+Treinando RandomForest - Fold 4
+{'0': {'precision': 0.6989947064251372, 'recall': 0.9051062759401333, 'f1-score': 0.7888088126490012, 'support': 15902.0}, '1': {'precision': 0.8654240613573531, 'recall': 0.6102377059489372, 'f1-score': 0.7157661810805827, 'support': 15902.0}, 'accuracy': 0.7576719909445353, 'macro avg': {'precision': 0.7822093838912452, 'recall': 0.7576719909445353, 'f1-score': 0.7522874968647919, 'support': 31804.0}, 'weighted avg': {'precision': 0.7822093838912452, 'recall': 0.7576719909445353, 'f1-score': 0.752287496864792, 'support': 31804.0}}
+Treinando RandomForest - Fold 5
+{'0': {'precision': 0.7022053454067475, 'recall': 0.9070557162621053, 'f1-score': 0.7915923496967867, 'support': 15902.0}, '1': {'precision': 0.8687738613158128, 'recall': 0.6153314048547353, 'f1-score': 0.7204122952328363, 'support': 15902.0}, 'accuracy': 0.7611935605584204, 'macro avg': {'precision': 0.7854896033612802, 'recall': 0.7611935605584204, 'f1-score': 0.7560023224648116, 'support': 31804.0}, 'weighted avg': {'precision': 0.78548960336128, 'recall': 0.7611935605584204, 'f1-score': 0.7560023224648116, 'support': 31804.0}}
+Finalizado modelo RandomForest para 'intents'
+-> MACRO salva: ./k_features/intents/RandomForest/resultados/matrizes_confusao/intents__RandomForest__MACRO.csv | ./k_features/intents/RandomForest/resultados/matrizes_confusao/intents__RandomForest__MACRO.png
+-> MACRO NORMALIZADA salva: ./k_features/intents/RandomForest/resultados/matrizes_confusao/intents__RandomForest__MACRO__NORMALIZADA.csv | ./k_features/intents/RandomForest/resultados/matrizes_confusao/intents__RandomForest__MACRO__NORMALIZADA.png
+
+Avaliação concluída para o grupo: intents
+                                       precision  recall  f1_score
+grupo_de_features modelo       classe                             
+intents           RandomForest 0          0.7000  0.9063    0.7899
+                               1          0.8671  0.6116    0.7173
+
+Arquivos salvos em: ./k_features/intents/RandomForest/resultados
+• CSV por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+• PNG por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+DataFrames criados:
+ - df : (159020, 192)
+
+Iniciando avaliação para o grupo de features: 'permissions' com 191 atributos e 159020 instâncias.
+
+Definindo os modelos RandomForest e XGBoost.
+
+Modelo: RandomForest - Total de folds: 5
+Treinando RandomForest - Fold 1
+{'0': {'precision': 0.8828943192637257, 'recall': 0.8747327380203748, 'f1-score': 0.8787945793979215, 'support': 15902.0}, '1': {'precision': 0.8758801171412549, 'recall': 0.883976858256823, 'f1-score': 0.879909861976151, 'support': 15902.0}, 'accuracy': 0.879354798138599, 'macro avg': {'precision': 0.8793872182024903, 'recall': 0.879354798138599, 'f1-score': 0.8793522206870362, 'support': 31804.0}, 'weighted avg': {'precision': 0.8793872182024903, 'recall': 0.879354798138599, 'f1-score': 0.8793522206870361, 'support': 31804.0}}
+Treinando RandomForest - Fold 2
+{'0': {'precision': 0.8724670013013571, 'recall': 0.8853603320337065, 'f1-score': 0.8788663815974281, 'support': 15902.0}, '1': {'precision': 0.8836407736005617, 'recall': 0.8705823166897245, 'f1-score': 0.877062941493237, 'support': 15902.0}, 'accuracy': 0.8779713243617155, 'macro avg': {'precision': 0.8780538874509594, 'recall': 0.8779713243617155, 'f1-score': 0.8779646615453326, 'support': 31804.0}, 'weighted avg': {'precision': 0.8780538874509594, 'recall': 0.8779713243617155, 'f1-score': 0.8779646615453326, 'support': 31804.0}}
+Treinando RandomForest - Fold 3
+{'0': {'precision': 0.8815781141156355, 'recall': 0.8754244749088165, 'f1-score': 0.8784905184110056, 'support': 15902.0}, '1': {'precision': 0.8762880159870106, 'recall': 0.8824047289649101, 'f1-score': 0.8793357355475482, 'support': 15902.0}, 'accuracy': 0.8789146019368633, 'macro avg': {'precision': 0.878933065051323, 'recall': 0.8789146019368632, 'f1-score': 0.8789131269792769, 'support': 31804.0}, 'weighted avg': {'precision': 0.878933065051323, 'recall': 0.8789146019368633, 'f1-score': 0.8789131269792769, 'support': 31804.0}}
+Treinando RandomForest - Fold 4
+{'0': {'precision': 0.8790256764391989, 'recall': 0.8805181738146145, 'f1-score': 0.8797712921365964, 'support': 15902.0}, '1': {'precision': 0.8803149606299212, 'recall': 0.8788202741793485, 'f1-score': 0.8795669824086604, 'support': 15902.0}, 'accuracy': 0.8796692239969816, 'macro avg': {'precision': 0.87967031853456, 'recall': 0.8796692239969814, 'f1-score': 0.8796691372726284, 'support': 31804.0}, 'weighted avg': {'precision': 0.87967031853456, 'recall': 0.8796692239969816, 'f1-score': 0.8796691372726284, 'support': 31804.0}}
+Treinando RandomForest - Fold 5
+{'0': {'precision': 0.8824609152478005, 'recall': 0.8767450635140234, 'f1-score': 0.879593703668654, 'support': 15902.0}, '1': {'precision': 0.8775382692908467, 'recall': 0.8832222361967048, 'f1-score': 0.8803710784467358, 'support': 15902.0}, 'accuracy': 0.8799836498553641, 'macro avg': {'precision': 0.8799995922693236, 'recall': 0.8799836498553641, 'f1-score': 0.8799823910576949, 'support': 31804.0}, 'weighted avg': {'precision': 0.8799995922693236, 'recall': 0.8799836498553641, 'f1-score': 0.8799823910576948, 'support': 31804.0}}
+Finalizado modelo RandomForest para 'permissions'
+-> MACRO salva: ./k_features/permissions/RandomForest/resultados/matrizes_confusao/permissions__RandomForest__MACRO.csv | ./k_features/permissions/RandomForest/resultados/matrizes_confusao/permissions__RandomForest__MACRO.png
+-> MACRO NORMALIZADA salva: ./k_features/permissions/RandomForest/resultados/matrizes_confusao/permissions__RandomForest__MACRO__NORMALIZADA.csv | ./k_features/permissions/RandomForest/resultados/matrizes_confusao/permissions__RandomForest__MACRO__NORMALIZADA.png
+
+Avaliação concluída para o grupo: permissions
+                                       precision  recall  f1_score
+grupo_de_features modelo       classe                             
+permissions       RandomForest 0          0.8797  0.8786    0.8791
+                               1          0.8787  0.8798    0.8792
+
+Arquivos salvos em: ./k_features/permissions/RandomForest/resultados
+• CSV por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+• PNG por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+DataFrames criados:
+ - df : (159020, 229)
+
+Iniciando avaliação para o grupo de features: 'opcodes' com 228 atributos e 159020 instâncias.
+
+Definindo os modelos RandomForest e XGBoost.
+
+Modelo: RandomForest - Total de folds: 5
+Treinando RandomForest - Fold 1
+{'0': {'precision': 0.8816055625790139, 'recall': 0.877059489372406, 'f1-score': 0.8793266502742576, 'support': 15902.0}, '1': {'precision': 0.8776901901901902, 'recall': 0.8822160734498805, 'f1-score': 0.879947312300069, 'support': 15902.0}, 'accuracy': 0.8796377814111432, 'macro avg': {'precision': 0.8796478763846021, 'recall': 0.8796377814111432, 'f1-score': 0.8796369812871633, 'support': 31804.0}, 'weighted avg': {'precision': 0.8796478763846021, 'recall': 0.8796377814111432, 'f1-score': 0.8796369812871633, 'support': 31804.0}}
+Treinando RandomForest - Fold 2
+{'0': {'precision': 0.8791048560923038, 'recall': 0.8720286756382845, 'f1-score': 0.8755524687460537, 'support': 15902.0}, '1': {'precision': 0.8730505302557704, 'recall': 0.8800779776128789, 'f1-score': 0.8765501691093573, 'support': 15902.0}, 'accuracy': 0.8760533266255817, 'macro avg': {'precision': 0.876077693174037, 'recall': 0.8760533266255817, 'f1-score': 0.8760513189277055, 'support': 31804.0}, 'weighted avg': {'precision': 0.8760776931740372, 'recall': 0.8760533266255817, 'f1-score': 0.8760513189277056, 'support': 31804.0}}
+Treinando RandomForest - Fold 3
+{'0': {'precision': 0.880682178406137, 'recall': 0.8735379197585209, 'f1-score': 0.877095501183899, 'support': 15902.0}, '1': {'precision': 0.87455554862454, 'recall': 0.8816501069047918, 'f1-score': 0.8780884977922525, 'support': 15902.0}, 'accuracy': 0.8775940133316564, 'macro avg': {'precision': 0.8776188635153386, 'recall': 0.8775940133316564, 'f1-score': 0.8775919994880758, 'support': 31804.0}, 'weighted avg': {'precision': 0.8776188635153385, 'recall': 0.8775940133316564, 'f1-score': 0.8775919994880758, 'support': 31804.0}}
+Treinando RandomForest - Fold 4
+{'0': {'precision': 0.8753601402981336, 'recall': 0.878883159351025, 'f1-score': 0.8771181122128782, 'support': 15902.0}, '1': {'precision': 0.8783937365829019, 'recall': 0.8748585083637278, 'f1-score': 0.8766225582860744, 'support': 15902.0}, 'accuracy': 0.8768708338573764, 'macro avg': {'precision': 0.8768769384405177, 'recall': 0.8768708338573764, 'f1-score': 0.8768703352494762, 'support': 31804.0}, 'weighted avg': {'precision': 0.8768769384405178, 'recall': 0.8768708338573764, 'f1-score': 0.8768703352494762, 'support': 31804.0}}
+Treinando RandomForest - Fold 5
+{'0': {'precision': 0.8754005655042413, 'recall': 0.8761162117972582, 'f1-score': 0.8757582424490052, 'support': 15902.0}, '1': {'precision': 0.8760148530429858, 'recall': 0.8752987045654634, 'f1-score': 0.8756566323802334, 'support': 15902.0}, 'accuracy': 0.8757074581813609, 'macro avg': {'precision': 0.8757077092736135, 'recall': 0.8757074581813609, 'f1-score': 0.8757074374146193, 'support': 31804.0}, 'weighted avg': {'precision': 0.8757077092736135, 'recall': 0.8757074581813609, 'f1-score': 0.8757074374146193, 'support': 31804.0}}
+Finalizado modelo RandomForest para 'opcodes'
+-> MACRO salva: ./k_features/opcodes/RandomForest/resultados/matrizes_confusao/opcodes__RandomForest__MACRO.csv | ./k_features/opcodes/RandomForest/resultados/matrizes_confusao/opcodes__RandomForest__MACRO.png
+-> MACRO NORMALIZADA salva: ./k_features/opcodes/RandomForest/resultados/matrizes_confusao/opcodes__RandomForest__MACRO__NORMALIZADA.csv | ./k_features/opcodes/RandomForest/resultados/matrizes_confusao/opcodes__RandomForest__MACRO__NORMALIZADA.png
+
+Avaliação concluída para o grupo: opcodes
+                                       precision  recall  f1_score
+grupo_de_features modelo       classe                             
+opcodes           RandomForest 0          0.8784  0.8755    0.8770
+                               1          0.8759  0.8788    0.8774
+
+Arquivos salvos em: ./k_features/opcodes/RandomForest/resultados
+• CSV por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+• PNG por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+DataFrames criados:
+ - df : (159020, 17722)
+
+Iniciando avaliação para o grupo de features: 'apicalls' com 17721 atributos e 159020 instâncias.
+
+Definindo os modelos RandomForest e XGBoost.
+
+Modelo: RandomForest - Total de folds: 5
+Treinando RandomForest - Fold 1
+{'0': {'precision': 0.9419873260599726, 'recall': 0.9067412904037228, 'f1-score': 0.9240283251626134, 'support': 15902.0}, '1': {'precision': 0.9101048675516761, 'recall': 0.9441579675512514, 'f1-score': 0.9268187289731165, 'support': 15902.0}, 'accuracy': 0.9254496289774871, 'macro avg': {'precision': 0.9260460968058244, 'recall': 0.9254496289774871, 'f1-score': 0.9254235270678649, 'support': 31804.0}, 'weighted avg': {'precision': 0.9260460968058244, 'recall': 0.9254496289774871, 'f1-score': 0.9254235270678649, 'support': 31804.0}}
+Treinando RandomForest - Fold 2
+{'0': {'precision': 0.9449367913462792, 'recall': 0.9118978744811973, 'f1-score': 0.9281233998975934, 'support': 15902.0}, '1': {'precision': 0.9148742253007656, 'recall': 0.9468620299333417, 'f1-score': 0.9305933250927071, 'support': 15902.0}, 'accuracy': 0.9293799522072695, 'macro avg': {'precision': 0.9299055083235224, 'recall': 0.9293799522072694, 'f1-score': 0.9293583624951502, 'support': 31804.0}, 'weighted avg': {'precision': 0.9299055083235224, 'recall': 0.9293799522072695, 'f1-score': 0.9293583624951502, 'support': 31804.0}}
+Treinando RandomForest - Fold 3
+{'0': {'precision': 0.9407581392314217, 'recall': 0.9067412904037228, 'f1-score': 0.9234365493611707, 'support': 15902.0}, '1': {'precision': 0.9099957516538205, 'recall': 0.942900264117721, 'f1-score': 0.9261558417492819, 'support': 15902.0}, 'accuracy': 0.9248207772607219, 'macro avg': {'precision': 0.9253769454426211, 'recall': 0.9248207772607219, 'f1-score': 0.9247961955552263, 'support': 31804.0}, 'weighted avg': {'precision': 0.9253769454426211, 'recall': 0.9248207772607219, 'f1-score': 0.9247961955552263, 'support': 31804.0}}
+Treinando RandomForest - Fold 4
+{'0': {'precision': 0.9416044170185125, 'recall': 0.9115834486228147, 'f1-score': 0.9263507684442598, 'support': 15902.0}, '1': {'precision': 0.9143153147662868, 'recall': 0.9434662306628097, 'f1-score': 0.9286620655504317, 'support': 15902.0}, 'accuracy': 0.9275248396428122, 'macro avg': {'precision': 0.9279598658923996, 'recall': 0.9275248396428122, 'f1-score': 0.9275064169973457, 'support': 31804.0}, 'weighted avg': {'precision': 0.9279598658923995, 'recall': 0.9275248396428122, 'f1-score': 0.9275064169973457, 'support': 31804.0}}
+Treinando RandomForest - Fold 5
+{'0': {'precision': 0.9424787379081997, 'recall': 0.9129040372280216, 'f1-score': 0.9274556780067081, 'support': 15902.0}, '1': {'precision': 0.9155539296384366, 'recall': 0.9442837378946044, 'f1-score': 0.9296969321734824, 'support': 15902.0}, 'accuracy': 0.928593887561313, 'macro avg': {'precision': 0.9290163337733182, 'recall': 0.928593887561313, 'f1-score': 0.9285763050900953, 'support': 31804.0}, 'weighted avg': {'precision': 0.9290163337733182, 'recall': 0.928593887561313, 'f1-score': 0.9285763050900953, 'support': 31804.0}}
+Finalizado modelo RandomForest para 'apicalls'
+-> MACRO salva: ./k_features/apicalls/RandomForest/resultados/matrizes_confusao/apicalls__RandomForest__MACRO.csv | ./k_features/apicalls/RandomForest/resultados/matrizes_confusao/apicalls__RandomForest__MACRO.png
+-> MACRO NORMALIZADA salva: ./k_features/apicalls/RandomForest/resultados/matrizes_confusao/apicalls__RandomForest__MACRO__NORMALIZADA.csv | ./k_features/apicalls/RandomForest/resultados/matrizes_confusao/apicalls__RandomForest__MACRO__NORMALIZADA.png
+
+Avaliação concluída para o grupo: apicalls
+                                       precision  recall  f1_score
+grupo_de_features modelo       classe                             
+apicalls          RandomForest 0          0.9424  0.9100    0.9259
+                               1          0.9130  0.9443    0.9284
+
+Arquivos salvos em: ./k_features/apicalls/RandomForest/resultados
+• CSV por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+• PNG por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+DataFrames criados:
+ - df : (159020, 420)
+
+Iniciando avaliação para o grupo de features: 'permissions_opcodes' com 419 atributos e 159020 instâncias.
+
+Definindo os modelos RandomForest e XGBoost.
+
+Modelo: RandomForest - Total de folds: 5
+Treinando RandomForest - Fold 1
+{'0': {'precision': 0.9204267336052714, 'recall': 0.9223368129794994, 'f1-score': 0.9213807833652669, 'support': 15902.0}, '1': {'precision': 0.9221753103535194, 'recall': 0.9202616023141743, 'f1-score': 0.9212174624657706, 'support': 15902.0}, 'accuracy': 0.9212992076468369, 'macro avg': {'precision': 0.9213010219793953, 'recall': 0.9212992076468369, 'f1-score': 0.9212991229155187, 'support': 31804.0}, 'weighted avg': {'precision': 0.9213010219793953, 'recall': 0.9212992076468369, 'f1-score': 0.9212991229155187, 'support': 31804.0}}
+Treinando RandomForest - Fold 2
+{'0': {'precision': 0.9174426598337604, 'recall': 0.9231543202112942, 'f1-score': 0.920289627934677, 'support': 15902.0}, '1': {'precision': 0.9226729102069228, 'recall': 0.9169286882153188, 'f1-score': 0.9197918309414919, 'support': 15902.0}, 'accuracy': 0.9200415042133065, 'macro avg': {'precision': 0.9200577850203415, 'recall': 0.9200415042133065, 'f1-score': 0.9200407294380843, 'support': 31804.0}, 'weighted avg': {'precision': 0.9200577850203416, 'recall': 0.9200415042133065, 'f1-score': 0.9200407294380843, 'support': 31804.0}}
+Treinando RandomForest - Fold 3
+{'0': {'precision': 0.9188580015026296, 'recall': 0.9229027795245881, 'f1-score': 0.920875949049382, 'support': 15902.0}, '1': {'precision': 0.9225618999494695, 'recall': 0.9185008175072318, 'f1-score': 0.9205268796874015, 'support': 15902.0}, 'accuracy': 0.9207017985159099, 'macro avg': {'precision': 0.9207099507260496, 'recall': 0.9207017985159099, 'f1-score': 0.9207014143683918, 'support': 31804.0}, 'weighted avg': {'precision': 0.9207099507260496, 'recall': 0.9207017985159099, 'f1-score': 0.9207014143683917, 'support': 31804.0}}
+Treinando RandomForest - Fold 4
+{'0': {'precision': 0.9174575424575424, 'recall': 0.9240347126147654, 'f1-score': 0.9207343818534995, 'support': 15902.0}, '1': {'precision': 0.9234861920445908, 'recall': 0.9168658030436423, 'f1-score': 0.9201640896181761, 'support': 15902.0}, 'accuracy': 0.9204502578292039, 'macro avg': {'precision': 0.9204718672510666, 'recall': 0.9204502578292039, 'f1-score': 0.9204492357358378, 'support': 31804.0}, 'weighted avg': {'precision': 0.9204718672510666, 'recall': 0.9204502578292039, 'f1-score': 0.9204492357358378, 'support': 31804.0}}
+Treinando RandomForest - Fold 5
+{'0': {'precision': 0.9197207678883071, 'recall': 0.9279335932587096, 'f1-score': 0.9238089275652663, 'support': 15902.0}, '1': {'precision': 0.9272842639593909, 'recall': 0.9190038988806439, 'f1-score': 0.9231255132335292, 'support': 15902.0}, 'accuracy': 0.9234687460696768, 'macro avg': {'precision': 0.923502515923849, 'recall': 0.9234687460696768, 'f1-score': 0.9234672203993978, 'support': 31804.0}, 'weighted avg': {'precision': 0.923502515923849, 'recall': 0.9234687460696768, 'f1-score': 0.9234672203993978, 'support': 31804.0}}
+Finalizado modelo RandomForest para 'permissions_opcodes'
+-> MACRO salva: ./k_features/permissions_opcodes/RandomForest/resultados/matrizes_confusao/permissions_opcodes__RandomForest__MACRO.csv | ./k_features/permissions_opcodes/RandomForest/resultados/matrizes_confusao/permissions_opcodes__RandomForest__MACRO.png
+-> MACRO NORMALIZADA salva: ./k_features/permissions_opcodes/RandomForest/resultados/matrizes_confusao/permissions_opcodes__RandomForest__MACRO__NORMALIZADA.csv | ./k_features/permissions_opcodes/RandomForest/resultados/matrizes_confusao/permissions_opcodes__RandomForest__MACRO__NORMALIZADA.png
+
+Avaliação concluída para o grupo: permissions_opcodes
+                                         precision  recall  f1_score
+grupo_de_features   modelo       classe                             
+permissions_opcodes RandomForest 0          0.9188  0.9241    0.9214
+                                 1          0.9236  0.9183    0.9210
+
+Arquivos salvos em: ./k_features/permissions_opcodes/RandomForest/resultados
+• CSV por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+• PNG por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+DataFrames criados:
+ - df : (159020, 18473)
+
+Iniciando avaliação para o grupo de features: 'todas' com 18472 atributos e 159020 instâncias.
+
+Definindo os modelos RandomForest e XGBoost.
+
+Modelo: RandomForest - Total de folds: 5
+Treinando RandomForest - Fold 1
+{'0': {'precision': 0.9505245434529206, 'recall': 0.9230285498679411, 'f1-score': 0.9365747830525778, 'support': 15902.0}, '1': {'precision': 0.9251925192519251, 'recall': 0.9519557288391397, 'f1-score': 0.9383833374659063, 'support': 15902.0}, 'accuracy': 0.9374921393535405, 'macro avg': {'precision': 0.9378585313524228, 'recall': 0.9374921393535405, 'f1-score': 0.937479060259242, 'support': 31804.0}, 'weighted avg': {'precision': 0.9378585313524229, 'recall': 0.9374921393535405, 'f1-score': 0.9374790602592421, 'support': 31804.0}}
+Treinando RandomForest - Fold 2
+{'0': {'precision': 0.951228928065886, 'recall': 0.9296943780656521, 'f1-score': 0.9403383793410508, 'support': 15902.0}, '1': {'precision': 0.931250768663141, 'recall': 0.9523330398691988, 'f1-score': 0.9416739211540853, 'support': 15902.0}, 'accuracy': 0.9410137089674255, 'macro avg': {'precision': 0.9412398483645135, 'recall': 0.9410137089674255, 'f1-score': 0.9410061502475681, 'support': 31804.0}, 'weighted avg': {'precision': 0.9412398483645136, 'recall': 0.9410137089674255, 'f1-score': 0.9410061502475681, 'support': 31804.0}}
+Treinando RandomForest - Fold 3
+{'0': {'precision': 0.9468599033816425, 'recall': 0.9244120236448246, 'f1-score': 0.9355013205205714, 'support': 15902.0}, '1': {'precision': 0.926162540696603, 'recall': 0.948119733366872, 'f1-score': 0.9370125229172493, 'support': 15902.0}, 'accuracy': 0.9362658785058483, 'macro avg': {'precision': 0.9365112220391227, 'recall': 0.9362658785058483, 'f1-score': 0.9362569217189104, 'support': 31804.0}, 'weighted avg': {'precision': 0.9365112220391227, 'recall': 0.9362658785058483, 'f1-score': 0.9362569217189104, 'support': 31804.0}}
+Treinando RandomForest - Fold 4
+{'0': {'precision': 0.9503029521722315, 'recall': 0.9271160860269149, 'f1-score': 0.9385663356251591, 'support': 15902.0}, '1': {'precision': 0.9288520564763658, 'recall': 0.9515155326374041, 'f1-score': 0.9400472166998012, 'support': 15902.0}, 'accuracy': 0.9393158093321595, 'macro avg': {'precision': 0.9395775043242987, 'recall': 0.9393158093321594, 'f1-score': 0.9393067761624802, 'support': 31804.0}, 'weighted avg': {'precision': 0.9395775043242987, 'recall': 0.9393158093321595, 'f1-score': 0.9393067761624802, 'support': 31804.0}}
+Treinando RandomForest - Fold 5
+{'0': {'precision': 0.9479280087106898, 'recall': 0.9307005408124764, 'f1-score': 0.939235284785023, 'support': 15902.0}, '1': {'precision': 0.9319374961398308, 'recall': 0.9488743554269903, 'f1-score': 0.9403296669055557, 'support': 15902.0}, 'accuracy': 0.9397874481197334, 'macro avg': {'precision': 0.9399327524252603, 'recall': 0.9397874481197334, 'f1-score': 0.9397824758452894, 'support': 31804.0}, 'weighted avg': {'precision': 0.9399327524252603, 'recall': 0.9397874481197334, 'f1-score': 0.9397824758452894, 'support': 31804.0}}
+Finalizado modelo RandomForest para 'todas'
+-> MACRO salva: ./k_features/todas/RandomForest/resultados/matrizes_confusao/todas__RandomForest__MACRO.csv | ./k_features/todas/RandomForest/resultados/matrizes_confusao/todas__RandomForest__MACRO.png
+-> MACRO NORMALIZADA salva: ./k_features/todas/RandomForest/resultados/matrizes_confusao/todas__RandomForest__MACRO__NORMALIZADA.csv | ./k_features/todas/RandomForest/resultados/matrizes_confusao/todas__RandomForest__MACRO__NORMALIZADA.png
+
+Avaliação concluída para o grupo: todas
+                                       precision  recall  f1_score
+grupo_de_features modelo       classe                             
+todas             RandomForest 0          0.9494  0.9270    0.9380
+                               1          0.9287  0.9506    0.9395
+
+Arquivos salvos em: ./k_features/todas/RandomForest/resultados
+• CSV por experimento da matriz de confusão em: pasta 'matrizes_confusao/'
+• PNG por experimento da matriz de confusão em: pasta 'matrizes_confusao/'

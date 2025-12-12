@@ -223,7 +223,7 @@ y = y[idx_final]
 
 print(f"Dados embaralhados: X={X.shape}, y={y.shape}")
 
-modelos = ["RandomForest"]
+modelos = ["XGBoost"]
 grupos = ["intents", "permissions", "opcodes", "apicalls", "permissions_opcodes", "todas"]
 qtde_features = [qtdIntents, qtdPermissions, qtdOpcodes, qtdApicalls, qtdPermissions + qtdOpcodes, qtdIntents + qtdPermissions + qtdOpcodes + qtdApicalls]
 
@@ -251,14 +251,14 @@ for modelo_nome in modelos:
         # Parte 3 - Separar as colunas das features e criar os DataFrames
         print("DataFrames criados:")
         print(f" - df : {df_final.shape}")
-        
+        pasta_saida = os.path.join(".",'k_features',nome_grupo,modelo_nome,"resultados")
+        os.makedirs(pasta_saida, exist_ok=True)        
         # Parte 7 - Executar o modelo e recuperar os resultados para cada DataFrame
         df_resultados = pd.concat([
             avaliar_modelos_em_dataframe(df_final, modelo_nome,nome_grupo, pasta_saida),
         ], ignore_index=True)
 
-        pasta_saida = os.path.join(".",'k_features',nome_grupo,modelo_nome,"resultados")
-        os.makedirs(pasta_saida, exist_ok=True)
+
         # Parte 8.2 - Exportar os dados consolidados
         caminho_saida = os.path.join(pasta_saida, 'resultados_modelos.csv')
         df_resultados.to_csv(caminho_saida, index=False)
