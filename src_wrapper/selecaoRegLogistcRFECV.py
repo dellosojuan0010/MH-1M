@@ -71,8 +71,10 @@ y = dados['classes']
 colunas = dados['column_names']
 
 
-grupos = ["intents", "permissions", "opcodes", "apicalls", "permissions_opcodes", "todas"]
+# grupos = ["intents", "permissions", "opcodes", "apicalls", "permissions_opcodes", "todas"]
+grupos = ["apicalls"]
 qtde_features = [qtdIntents, qtdPermissions, qtdOpcodes, qtdApicalls, qtdPermissions + qtdOpcodes, qtdIntents + qtdPermissions + qtdOpcodes + qtdApicalls]
+qtde_features = [qtdApicalls]
 k = 0
 for nome_grupo in grupos:
     print(f"\n\n--- Processando grupo: {nome_grupo} ---\n")
@@ -108,6 +110,7 @@ for nome_grupo in grupos:
 
     rfe = RFE(
         estimator=estimator,
+        step=100,
         n_features_to_select=qtde_features[k],
         verbose=1
     )
